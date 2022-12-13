@@ -80,12 +80,14 @@ class ProductManager {
           reject(err);
         }
         this.products = JSON.parse(data);
-        const product = this.products.getProductById(id);
-        product.update = "actualizar";
-        this.products.deleteProductById(id)
-        this.products.push({...product, id: this.products.length + 1});
-        fs.writeFileSync(this.file, JSON.stringify(this.products), "utf8");
-        resolve();
+        const productsIndex = this.products.findIndex((product) => product.id === id);
+        this.products[productsIndex] = update;
+        fs.writeFile(this.file, JSON.stringify(this.products), (err) => {
+          if (err) {
+            reject(err);
+          }
+          resolve();
+        });
       });
     });
   }
