@@ -1,14 +1,13 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 class ProductManager {
-  constructor(){
-      this.products = [];
-      this.file = path.join(__dirname, "products.json");
+  constructor(path){
+      this.path = path;
   }
 
   fileExists() {
-    return fs.existsSync(this.file);
+    return fs.existsSync(this.path);
   }
 
   addProduct(product) {
@@ -29,7 +28,7 @@ class ProductManager {
         });
       } else {
         this.products.push({...product, id: this.products.length + 1});
-        fs.writeFileSync(this.file, JSON.stringify(this.products), "utf8");
+        fs.writeFileSync(this.path, JSON.stringify(this.products), "utf8");
         resolve();
       }
     });
@@ -37,7 +36,7 @@ class ProductManager {
 
   getProducts() {
     return new Promise((resolve, reject) => {
-      fs.readFile(this.file, "utf8", (err, data) => {
+      fs.readFile(this.path, "utf8", (err, data) => {
         if (err) {
           reject(err);
         }
@@ -49,7 +48,7 @@ class ProductManager {
 
   getProductById(id) {
     return new Promise((resolve, reject) => {
-      fs.readFile(this.file, "utf8", (err, data) => {
+      fs.readFile(this.path, "utf8", (err, data) => {
         if (err) {
           reject(err);
         }
@@ -62,7 +61,7 @@ class ProductManager {
 
   deleteProductById(id) {
     return new Promise((resolve, reject) => {
-      fs.readFile(this.file, "utf8", (err, data) => {
+      fs.readFile(this.path, "utf8", (err, data) => {
         if (err) {
           reject(err);
         }
@@ -75,14 +74,14 @@ class ProductManager {
 
   updateProduct(id, update){
     return new Promise((resolve, reject) => {
-      fs.readFile(this.file, "utf8", (err, data) => {
+      fs.readFile(this.path, "utf8", (err, data) => {
         if(err){
           reject(err);
         }
         this.products = JSON.parse(data);
         const productsIndex = this.products.findIndex((product) => product.id === id);
         this.products[productsIndex] = update;
-        fs.writeFile(this.file, JSON.stringify(this.products), (err) => {
+        fs.writeFile(this.path, JSON.stringify(this.products), (err) => {
           if (err) {
             reject(err);
           }
@@ -93,4 +92,4 @@ class ProductManager {
   }
 }
 
-module.exports = ProductManager;
+export default ProductManager;
