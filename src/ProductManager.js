@@ -53,7 +53,7 @@ class ProductManager {
           reject(err);
         }
         this.products = JSON.parse(data);
-        const product = this.products.find((product) => product.id === id);
+        const product = this.products.find((product) => product.id == id);
         resolve(product);
       });
     });
@@ -66,7 +66,7 @@ class ProductManager {
           reject(err);
         }
         this.products = JSON.parse(data);
-        this.products = this.products.filter((product) => product.id !== id);
+        this.products = this.products.filter((product) => product.id != id);
         fs.writeFile;
       });
     });
@@ -79,7 +79,7 @@ class ProductManager {
           reject(err);
         }
         this.products = JSON.parse(data);
-        const productsIndex = this.products.findIndex((product) => product.id === id);
+        const productsIndex = this.products.findIndex((product) => product.id == id);
         this.products[productsIndex] = update;
         fs.writeFile(this.path, JSON.stringify(this.products), (err) => {
           if (err) {
