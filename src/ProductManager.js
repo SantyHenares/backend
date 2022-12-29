@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 
 class ProductManager {
   constructor(path){
@@ -10,6 +9,14 @@ class ProductManager {
     return fs.existsSync(this.path);
   }
 
+  async writeAll(data) {
+    try {
+      await fs.promises.writeFile(this.Path, JSON.stringify(data));
+    } catch (err) {
+      throw err;
+    }
+  }
+
   addProduct(product) {
     return new Promise((resolve, reject) => {
       if (this.fileExists()) {
@@ -18,7 +25,7 @@ class ProductManager {
             return console.log("Error al leer el archivo");
           }
           this.products = JSON.parse(data);
-          this.products.push({...product, id: this.products.length + 1});
+          this.products.push({id: this.products.length + 1, ...product });
           fs.writeFile("./products.json", JSON.stringify(this.products), (err) => {
             if (err) {
               return console.log("Error al escribir el archivo");
