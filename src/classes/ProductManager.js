@@ -11,7 +11,7 @@ class ProductManager {
 
   async writeAll(data) {
     try {
-      await fs.promises.writeFile(this.Path, JSON.stringify(data));
+      await fs.promises.writeFile(this.path, JSON.stringify(data));
     } catch (err) {
       throw err;
     }
@@ -25,7 +25,8 @@ class ProductManager {
             return console.log("Error al leer el archivo");
           }
           this.products = JSON.parse(data);
-          this.products.push({id: this.products.length + 1, ...product });
+          const nuevoid = this.products[this.products.length - 1].id + 1;
+          this.products.push({id: nuevoid, ...product });
           fs.writeFile("./products.json", JSON.stringify(this.products), (err) => {
             if (err) {
               return console.log("Error al escribir el archivo");
@@ -74,7 +75,12 @@ class ProductManager {
         }
         this.products = JSON.parse(data);
         this.products = this.products.filter((product) => product.id != id);
-        fs.writeFile;
+        fs.writeFile(this.path, JSON.stringify(this.products), (err) => {
+          if (err) {
+            reject(err);
+          }
+          resolve();
+        });      
       });
     });
   }

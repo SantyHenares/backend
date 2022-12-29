@@ -16,19 +16,6 @@ app.get('/', (req, res) =>{
     res.send("¡Hola mundo!")
 })
 
-
-  // app.post("/products", async (req, res) => {
-  //   try {
-  //     const products = await productManager.getProducts();
-  //     const newProduct = req.body;
-  //     await productManager.addProduct(products, newProduct);
-  //     res.send(newProduct);
-  //   } catch (err) {
-  //     res.status(500).send(err.message);
-  //   }
-  // });
-
-
 app.listen(port, ()=>{
     console.log(`Listening on por ${port}`)
 })

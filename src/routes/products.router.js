@@ -1,5 +1,5 @@
 import express from "express";
-import ProductManager from "../ProductManager.js";
+import ProductManager from "../classes/ProductManager.js";
 import path from "path";
 
 const productsRouter = express.Router();
@@ -36,10 +36,9 @@ productsRouter.get("/:pid", async (req, res) => {
 });
 
 productsRouter.post("/", async (req, res) => {
+  const newProduct = req.body;
   try{
-    const products = await productManager.getProducts();
-    const newProduct = req.body;
-    await productManager.addProduct(products, newProduct);
+    await productManager.addProduct(newProduct);
     res.send(newProduct);
   } catch (err) {
     res.status(500).send(err.message);
@@ -67,7 +66,15 @@ productsRouter.put("/:pid", async (req, res) => {
 
 productsRouter.delete("/:pid", async (req, res) => {
   try {
-    await productManager.deleteProductById(req.params.pid);
+    const products = await productManager.getProducts();
+    const productIndex = products.findIndex((product) => product.id == req.params.pid);
+    if (productIndex === -1) {
+      res.status(404).send("Producto no encontrado");
+      return;
+    }
+
+    products.splice(productIndex, 1);
+    await productManager.writeAll(products);
     res.send("Producto eliminado");
   } catch (err) {
     res.status(500).send(err.message);
