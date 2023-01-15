@@ -2,6 +2,7 @@ import express from "express";
 import { engine } from "express-handlebars";
 import productsRouter from "./routes/products.js";
 import cartRouter from "./routes/cart.js";
+import views from "./routes/views.js";
 import { Server } from "socket.io";
 
 const app = express();
@@ -26,6 +27,11 @@ app.get('/', (req, res) =>{
     res.send("Hola");
 })
 
+app.use('/views', views);
+
 socketServer.on('connection', socket  => {
     console.log("Nuevo cliente conectado.");
+    socket.on("products", () => {
+        listadoDeProductos();
+      });
 })

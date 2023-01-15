@@ -1,27 +1,29 @@
 const socket = io();
 
-socket.on("messages", (data) => {
-  render(data);
+socket.on("products", () => {
+  listadoDeProductos();
 });
 
-// const data = await productManager.getProducts();
-socket.emit("new-message", data);
+const ContainerProductos = document.getElementById('product-container');
 
-function render(data) {
-  const html = data
-    .map((elem) => {
-      return `<div class="card" style="width: 18rem;">
-      <img src="${elem.thumbnail}" class="card-img-top" alt="...">
+const listadoDeProductos = async () => {
+  const resp = await fetch('../products.json')
+  const data = await resp.json()
+
+  data.forEach(elem => {
+      const div = document.createElement('div');
+      div.classList.add('col-sm-3');
+      div.innerHTML = `<div class="card mb-4" style="width: 18rem;">
+      <img src="${elem.image}" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">${elem.title}</h5>
-        <p class="card-text">${elem.description}</p>
-        <p class="card-text">${elem.price}</p>
+        <p class="card-text">$${elem.price}</p>
         <a href="#" class="btn btn-primary">Ir a comprar</a>
       </div>
-    </div>`;
-    })
-    .join(" ");
-
-  document.getElementById("messages").innerHTML = html;
+    </div>`
+    ContainerProductos.appendChild(div);
+  });
 }
+
+listadoDeProductos();
 
