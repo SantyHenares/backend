@@ -1,12 +1,13 @@
 const socket = io();
 
-socket.on("products", () => {
-  listadoDeProductos();
+const ContainerProductos = document.getElementById('product-container');
+const ContainerRealTime = document.getElementById('realtime-container');
+
+socket.on("productsRealTime", () => {
+  listadoDeProductos(ContainerRealTime);
 });
 
-const ContainerProductos = document.getElementById('product-container');
-
-const listadoDeProductos = async () => {
+const listadoDeProductos = async (container) => {
   const resp = await fetch('../products.json')
   const data = await resp.json()
 
@@ -21,9 +22,8 @@ const listadoDeProductos = async () => {
         <a href="#" class="btn btn-primary">Ir a comprar</a>
       </div>
     </div>`
-    ContainerProductos.appendChild(div);
+    container.appendChild(div);
   });
 }
 
-listadoDeProductos();
-
+listadoDeProductos(ContainerProductos);

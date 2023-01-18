@@ -31,7 +31,7 @@ app.use('/views', views);
 
 socketServer.on('connection', socket  => {
     console.log("Nuevo cliente conectado.");
-    socket.on("products", () => {
-        listadoDeProductos();
-      });
+    socket.on("productsRealTime", () => {
+        listadoDeProductos(ContainerRealTime);
+    });
 })
