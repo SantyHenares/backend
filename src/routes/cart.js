@@ -1,8 +1,9 @@
 import express from "express";
-import ProductManager from "../classes/ProductManager.js";
-import CartManager from "../classes/CartManager.js";
+import ProductManager from "../dao/classes/ProductManager.js";
+import CartManager from "../dao/classes/CartManager.js";
 import { v4 } from "uuid";
 import path from "path";
+import cartModel from "../dao/models/cart.model.js";
 
 const cartRouter = express.Router();
 
@@ -16,9 +17,9 @@ const productManager = new ProductManager(
 
 cartRouter.get("/", async (req, res) => {
   try {
-    const carts = await cartManager.getAll();
-    res.send(carts);
-  } catch (err) {
+    let cart = await cartModel.find();
+    res.send({ result: sucess, payload: cart });
+  } catch (error) {
     res.status(500).send(err.message);
   }
 });
@@ -30,25 +31,23 @@ cartRouter.post("/", async (req, res) => {
   };
 
   try {
-    const carts = await cartManager.getAll();
-    await cartManager.writeAll([...carts, newCart]);
-    res.send(newCart);
+    const result = await cartModel.create(newCart);
+    res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
-cartRouter.get("/:cid", async (req, res) =>{
-  const { cid } = req.params;
+cartRouter.get("/:cid", async (req, res) => {
+  const cid = req.params;
 
   try {
-    const carts = await cartManager.getAll();
-    const cart = carts.find((cart) => cart.id === cid);
-    if (!cart) {
-      res.status(404).send("Carrito no encontrado");
+    const product = await cartModel.find(cid);
+    if (!product) {
+      res.status(404).send("Producto no encontrado");
       return;
     }
-    res.send(cart);
+    res.send(product);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -88,18 +87,11 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
 });
 
 cartRouter.delete("/:cid", async (req, res) => {
-  const { cid } = req.params;
+  const cid = req.params;
 
   try {
-    const carts = await cartManager.getAll();
-    const cart = carts.find((cart) => cart.id === cid);
-    if (!cart) {
-      res.status(404).send("Carrito no encontrado");
-      return;
-    }
-    const newCarts = carts.filter((cart) => cart.id !== cid);
-    await cartManager.writeAll(newCarts);
-    res.send("Carrito eliminado");
+    const result = await cartModel.deleteOne({ id: cid });
+    res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
   }

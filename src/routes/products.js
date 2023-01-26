@@ -1,16 +1,17 @@
 import express from "express";
-import ProductManager from "../classes/ProductManager.js";
+import ProductManager from "../dao/classes/ProductManager.js";
 import path from "path";
+import productModel from "../dao/models/product.model.js";
 
 const productsRouter = express.Router();
 
-const productManager = new ProductManager(
-    path.resolve(process.cwd(), "public", "products.json")
-  );
+// const productManager = new ProductManager(
+//   path.resolve(process.cwd(), "public", "products.json")
+// );
 
 productsRouter.get("/", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
+    let products = await productModel.find();
     const limit = req.query.limit;
     let limitedProducts;
     if (limit) {
@@ -23,23 +24,24 @@ productsRouter.get("/", async (req, res) => {
 });
 
 productsRouter.get("/:pid", async (req, res) => {
+  const pid = req.params.pid;
   try {
-    const product = await productManager.getProductById(req.params.pid);
+    const product = await productModel.find(pid);
     if (!product) {
       res.status(404).send("Producto no encontrado");
       return;
     }
     res.send(product);
   } catch (err) {
-     res.status(500).send(err.message);
+    res.status(500).send(err.message);
   }
 });
 
 productsRouter.post("/", async (req, res) => {
   const newProduct = req.body;
-  try{
-    await productManager.addProduct(newProduct);
-    res.send(newProduct);
+  try {
+    const result = await productModel.insertMany(newProduct);
+    res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -47,39 +49,24 @@ productsRouter.post("/", async (req, res) => {
 
 productsRouter.put("/:pid", async (req, res) => {
   const { pid } = req.params;
-  const newProduct = req.body;
+  const updateProduct = req.body;
 
   try {
-    const products = await productManager.getProducts();
-    const productIndex = products.findIndex((product) => product.id === pid);
-    if (productIndex === -1) {
-      res.status(404).send("Producto no encontrado");
-      return;
-    }
-    products[productIndex] = newProduct;
-    await productManager.writeAll(products);
-    res.send(newProduct);
+    const result = await productModel.updateOne({ id: pid }, updateProduct);
+    res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
 productsRouter.delete("/:pid", async (req, res) => {
+  const pid = req.params;
   try {
-    const products = await productManager.getProducts();
-    const productIndex = products.findIndex((product) => product.id == req.params.pid);
-    if (productIndex === -1) {
-      res.status(404).send("Producto no encontrado");
-      return;
-    }
-
-    products.splice(productIndex, 1);
-    await productManager.writeAll(products);
-    res.send("Producto eliminado");
+    const result = await productModel.deleteOne({ id: pid });
+    res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
-
 
 export default productsRouter;
