@@ -7,23 +7,44 @@ import messagesRouter from "./routes/messeges.js";
 import views from "./routes/views.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
+import userModel from "./dao/models/user.model.js";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+const DB_USER = process.env.DB_USER;
+const DB_PASS = process.env.DB_PASS;
+const DB_NAME = process.env.DB_NAME;
+const PORT = process.env.PORT;
 
 const app = express();
-const port = 8080; //Puerto
-const httpServer = app.listen(port, () => {
-  console.log(`Listening on por ${port}`);
+const httpServer = app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
 const socketServer = new Server(httpServer);
 
-mongoose.connect(
-  "mongodb+srv://SantiHenares:ycsb1s@cluster0.ijkaujy.mongodb.net/ecommerce?retryWrites=true&w=majority",
-  (error) => {
-    if (error) {
-      res.status(500).send(err.message);
-      process.exit();
-    }
+const environment = (async) => {
+  try {
+    mongoose.connect(
+      `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.ijkaujy.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+      (error) => {
+        if (error) {
+          process.exit();
+        } else {
+          userModel
+            .find()
+            .explain("executionStats")
+            .then((result) => {
+              console.log(result);
+            });
+        }
+      }
+    );
+  } catch (error) {
+    error;
   }
-);
+};
+
+environment();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,15 +54,11 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/chat", chatRouter);
 app.use("/messages", messagesRouter);
-app.use("/views", views);
+app.use("/", views);
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
-
-app.get("/", (req, res) => {
-  res.send("Hola");
-});
 
 socketServer.on("connection", (socket) => {
   console.log("Nuevo cliente conectado.");

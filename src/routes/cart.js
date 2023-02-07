@@ -97,4 +97,10 @@ cartRouter.delete("/:cid", async (req, res) => {
   }
 });
 
+cartRouter.delete("/:cid/products/:pid", async (req, res) => {});
+
+cartRouter.put("/cid", async (req, res) => {});
+
+cartRouter.put("/:cid/products/:pid ", async (req, res) => {});
+
 export default cartRouter;
