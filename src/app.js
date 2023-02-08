@@ -2,8 +2,6 @@ import express from "express";
 import { engine } from "express-handlebars";
 import productsRouter from "./routes/products.js";
 import cartRouter from "./routes/cart.js";
-import chatRouter from "./routes/chat.js";
-import messagesRouter from "./routes/messeges.js";
 import views from "./routes/views.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
@@ -53,8 +51,6 @@ app.use(express.static("public"));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
-app.use("/chat", chatRouter);
-app.use("/messages", messagesRouter);
 app.use("/", views);
 app.use(
   cors({
@@ -74,30 +70,5 @@ socketServer.on("connection", (socket) => {
   console.log("Nuevo cliente conectado.");
   socket.on("productsRealTime", () => {
     listadoDeProductos(ContainerRealTime);
-  });
-});
-
-//Chat
-
-app.post("/socketMessage", (req, res) => {
-  const { message } = req.body;
-  socketServer.emit("message", message);
-
-  res.send("ok");
-});
-
-socketServer.on("connection", (socket) => {
-  socket.on("new-user", (data) => {
-    socket.user = data.user;
-    socket.id = data.id;
-    socketServer.emit("new-user-connected", {
-      user: socket.user,
-      id: socket.id,
-    });
-  });
-  socket.on("message", (data) => {
-    messages.push(data);
-    socketServer.emit("messageLogs", messages);
-    messageModel.create(data);
   });
 });
