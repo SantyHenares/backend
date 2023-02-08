@@ -26,12 +26,23 @@ productsRouter.get("/", async (req, res) => {
 productsRouter.get("/:pid", async (req, res) => {
   const pid = req.params.pid;
   try {
-    const product = await productModel.find(pid);
+    const product = await productModel.findOne({ id: pid });
     if (!product) {
       res.status(404).send("Producto no encontrado");
       return;
     }
-    res.send(product);
+    res.send({
+      status: "success",
+      payload: product,
+      totalPages: 1,
+      prevPage: 1,
+      nextPage: 1,
+      page: 1,
+      hasPrevPage: false,
+      hasNextPage: false,
+      prevLink: null,
+      nextLink: null,
+    });
   } catch (err) {
     res.status(500).send(err.message);
   }

@@ -9,6 +9,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import userModel from "./dao/models/user.model.js";
 import * as dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 const DB_USER = process.env.DB_USER;
@@ -55,6 +56,15 @@ app.use("/api/carts", cartRouter);
 app.use("/chat", chatRouter);
 app.use("/messages", messagesRouter);
 app.use("/", views);
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000/",
+      "http://localhost:3001/",
+      "http://localhost:8080/",
+    ],
+  })
+);
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
