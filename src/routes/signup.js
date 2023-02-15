@@ -1,5 +1,6 @@
 import express from "express";
 import userModel from "../dao/models/user.model.js";
+import { createHash } from "../utils.js";
 
 const signupRouter = express.Router();
 
@@ -14,7 +15,7 @@ signupRouter.post("/", async (req, res) => {
     first_name,
     last_name,
     email,
-    password,
+    password: createHash(password),
   };
 
   try {
