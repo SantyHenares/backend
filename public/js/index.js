@@ -34,3 +34,39 @@ const listadoDeProductos = async (container) => {
 
 listadoDeProductos(ContainerProductos);
 listadoDeProductos(ContainerRealTime);
+
+// Sign up form
+const elementExists = (id) => document.getElementById(id) !== null;
+
+elementExists("signup") &&
+  document.getElementById("signup").addEventListener("click", function () {
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const data = { firstName, lastName, email, password };
+    console.log(data);
+
+    fetch("/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  });
+
+// Login form
+
+elementExists("send") &&
+  document.getElementById("send").addEventListener("click", function () {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch(`/login?username=${username}&password=${password}`, {});
+    console
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  });

@@ -43,12 +43,23 @@ cartRouter.get("/:cid", async (req, res) => {
   const cid = req.params;
 
   try {
-    const product = await cartModel.find(cid);
-    if (!product) {
+    const cart = await cartModel.find(cid);
+    if (!cart) {
       res.status(404).send("Producto no encontrado");
       return;
     }
-    res.send(product);
+    res.send({
+      status: "success",
+      payload: cart,
+      totalPages: 1,
+      prevPage: 1,
+      nextPage: 1,
+      page: 1,
+      hasPrevPage: false,
+      hasNextPage: false,
+      prevLink: null,
+      nextLink: null,
+    });
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -98,7 +109,18 @@ cartRouter.delete("/:cid", async (req, res) => {
   }
 });
 
-cartRouter.delete("/:cid/products/:pid", async (req, res) => {});
+cartRouter.delete("/:cid/product/:pid", async (req, res) => {
+  const cid = req.params.cid;
+  const pid = req.params.pid;
+  try {
+    const cart = await cartModel.findOne({ id: cid });
+    const productDelete = cart.product.deleteOne({ id: pid });
+    const result = await cartModel.updateOne({ id: cid }, productDelete);
+    res.send({ status: "success", payload: result });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
 
 cartRouter.put("/cid", async (req, res) => {});
 

@@ -4,7 +4,7 @@ const cartCollection = "cart";
 
 const cartSchema = new mongoose.Schema({
   id: String,
-  cantidad: Number,
+  totalPrice: Number,
   product: [],
 });
 

@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  gender: String,
+  password: String,
 });
 
 const userModel = mongoose.model(userCollection, userSchema);

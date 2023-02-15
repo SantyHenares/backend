@@ -2,12 +2,17 @@ import express from "express";
 import { engine } from "express-handlebars";
 import productsRouter from "./routes/products.js";
 import cartRouter from "./routes/cart.js";
+import loginRouter from "./routes/login.js";
+import signupRouter from "./routes/signup.js";
 import views from "./routes/views.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import userModel from "./dao/models/user.model.js";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import FileStore from "session-file-store";
 
 dotenv.config();
 const DB_USER = process.env.DB_USER;
@@ -20,6 +25,7 @@ const httpServer = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 const socketServer = new Server(httpServer);
+const fileStorage = FileStore(session);
 
 const environment = (async) => {
   try {
@@ -52,6 +58,8 @@ app.use(express.static("public"));
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/", views);
+app.use("/signup", signupRouter);
+app.use("/login", loginRouter);
 app.use(
   cors({
     origin: [
@@ -59,6 +67,15 @@ app.use(
       "http://localhost:3001/",
       "http://localhost:8080/",
     ],
+  })
+);
+app.use(cookieParser());
+app.use(
+  session({
+    store: new fileStorage({ path: "./session", ttl: 100, retries: 0 }),
+    secret: "lasbdljasd",
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
