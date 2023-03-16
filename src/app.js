@@ -12,38 +12,37 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import FileStore from "session-file-store";
+import MongoStore from "connect-mongo";
+import passport from "passport";
+import inicializatePassport from "./config/passport.config.js";
 
 dotenv.config();
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_NAME = process.env.DB_NAME;
 const PORT = process.env.PORT;
+const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.ijkaujy.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 const app = express();
 const httpServer = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 const socketServer = new Server(httpServer);
-const fileStorage = FileStore(session);
 
 const environment = (async) => {
   try {
-    mongoose.connect(
-      `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.ijkaujy.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-      (error) => {
-        if (error) {
-          process.exit();
-        } else {
-          userModel
-            .find()
-            .explain("executionStats")
-            .then((result) => {
-              console.log(result);
-            });
-        }
+    mongoose.connect(STRING_CONNECTION, (error) => {
+      if (error) {
+        process.exit();
+      } else {
+        userModel
+          .find()
+          .explain("executionStats")
+          .then((result) => {
+            console.log(result);
+          });
       }
-    );
+    });
   } catch (error) {
     error;
   }
@@ -72,12 +71,38 @@ app.use(
 app.use(cookieParser());
 app.use(
   session({
-    store: new fileStorage({ path: "./session", ttl: 100, retries: 0 }),
+    store: MongoStore.create({
+      mongoUrl: STRING_CONNECTION,
+      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+      ttl: 15,
+    }),
     secret: "lasbdljasd",
     resave: false,
     saveUninitialized: false,
   })
 );
+inicializatePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/setSignedCookie", (req, res) => {
+  res.cookie("ejemplocookie", "cookie", {
+    maxAge: 10000,
+    httpOnly: true,
+    signed: true,
+  });
+  res.send("cookie seteada");
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Sesion finalizada");
+    }
+  });
+});
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");

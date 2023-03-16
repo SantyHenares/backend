@@ -14,12 +14,8 @@ loginRouter.get("/", async (req, res) => {
         email: email,
         password: password,
       });
-      console.log(response);
-      if (response.length > 0) {
-        res.send("home", {});
-      } else {
-        res.render("login", {});
-      }
+      req.session.user = email;
+      req.session.admin = true;
     } catch (err) {
       res.status(500).send(err.message);
     }

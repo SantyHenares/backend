@@ -46,7 +46,6 @@ elementExists("signup") &&
     const password = document.getElementById("password").value;
 
     const data = { firstName, lastName, email, password };
-    console.log(data);
 
     fetch("/signup", {
       method: "POST",
@@ -54,7 +53,10 @@ elementExists("signup") &&
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
   });
 
 // Login form
