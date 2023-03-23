@@ -7,12 +7,11 @@ const productsSchema = new mongoose.Schema({
   title: String,
   price: Number,
   description: String,
-  category: String,
+  year: Number,
+  genre: String,
   image: String,
-  rating: {
-    rate: Number,
-    count: Number,
-  },
+  rate: Number,
+  stock: Number,
 });
 
 const productModel = mongoose.model(productsCollection, productsSchema);

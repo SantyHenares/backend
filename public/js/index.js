@@ -15,12 +15,12 @@ const getFile = async (path) => {
 };
 
 const listadoDeProductos = async (container) => {
-  const data = await getFile("/products.json");
+  const data = await getFile("/movies.json");
 
   data.forEach((elem) => {
     const div = document.createElement("div");
     div.classList.add("col-sm-3");
-    div.innerHTML = `<div class="card mb-4" style="width: 18rem;">
+    div.innerHTML = `<div class="card mb-4" style="width: 15rem;">
       <img src="${elem.image}" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">${elem.title}</h5>

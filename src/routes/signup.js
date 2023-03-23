@@ -10,15 +10,13 @@ signupRouter.get("/", (req, res) => {
 
 signupRouter.post("/", async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
-
-  const newUser = {
-    first_name,
-    last_name,
-    email,
-    password: createHash(password),
-  };
-
   try {
+    const newUser = {
+      first_name,
+      last_name,
+      email,
+      password: createHash(password, 10),
+    };
     const response = await userModel.create(newUser);
     res.send({ status: "success", payload: response });
   } catch (err) {

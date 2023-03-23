@@ -18,7 +18,6 @@ const productManager = new ProductManager(
 cartRouter.get("/", async (req, res) => {
   try {
     const cart = await cartModel.find();
-    console.log(cart);
     res.send({ payload: cart });
   } catch (err) {
     res.status(500).send(err.message);
