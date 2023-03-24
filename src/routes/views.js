@@ -1,21 +1,19 @@
 import express from "express";
+import {
+  getHome,
+  getRealTimeProducts,
+  getRenderCartId,
+  getRenderProducts,
+} from "../controllers/views.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.render("home", {});
-});
+router.get("/", getHome);
 
-router.get("/realtimeproducts", (req, res) => {
-  res.render("realTimeProducts", {});
-});
+router.get("/realtimeproducts", getRealTimeProducts);
 
-router.get("/products", (req, res) => {
-  res.render("products", {});
-});
+router.get("/products", getRenderProducts);
 
-router.get("/carts/:cid", (req, res) => {
-  res.render("carts", {});
-});
+router.get("/carts/:cid", getRenderCartId);
 
 export default router;
