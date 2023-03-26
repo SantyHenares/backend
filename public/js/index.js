@@ -40,12 +40,9 @@ const elementExists = (id) => document.getElementById(id) !== null;
 
 elementExists("signup") &&
   document.getElementById("signup").addEventListener("click", function () {
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    const data = { firstName, lastName, email, password };
+    const myForm = document.getElementById("myForm");
+    const formData = new FormData(myForm);
+    const data = Object.fromEntries(formData);
 
     fetch("/signup", {
       method: "POST",

@@ -39,7 +39,7 @@ const environment = (async) => {
           .find()
           .explain("executionStats")
           .then((result) => {
-            console.log(result);
+            console.log("hola");
           });
       }
     });

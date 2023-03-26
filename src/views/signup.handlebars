@@ -10,19 +10,19 @@
                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
             </div>
             <div class="col-xl-6">
-              <div class="card-body p-md-5 text-black">
+              <form id="myForm" class="card-body p-md-5 text-black">
                 <h3 class="mb-5 text-uppercase">Registration form</h3>
 
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="firstname" class="form-control form-control-lg" />
+                      <input type="text" id="firstname" name="firstName" class="form-control form-control-lg" />
                       <label class="form-label" for="firstname">First name</label>
                     </div>
                   </div>
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="lastname" class="form-control form-control-lg" />
+                      <input type="text" id="lastname" name="lastName" class="form-control form-control-lg" />
                       <label class="form-label" for="lastname">Last name</label>
                     </div>
                   </div>
@@ -31,13 +31,13 @@
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="email" class="form-control form-control-lg" />
+                      <input type="text" id="email" name="email" class="form-control form-control-lg" />
                       <label class="form-label" for="email">Email</label>
                     </div>
                   </div>
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input type="text" id="password" class="form-control form-control-lg" />
+                      <input type="text" id="password" name="password" class="form-control form-control-lg" />
                       <label class="form-label" for="password">Password</label>
                     </div>
                   </div>
@@ -47,7 +47,7 @@
                   <button type="button" class="btn btn-light btn-lg">Reset all</button>
                   <button type="button" id="signup" class="btn btn-info btn-lg ms-2">Sign up</button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
