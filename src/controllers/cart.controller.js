@@ -121,3 +121,11 @@ export const deleteCartIdProductId = async (req, res) => {
 export const putCartId = async (req, res) => {};
 
 export const putCartIdProductId = async (req, res) => {};
+
+export const getPurchase = async (req, res) => {
+  if ("2" == 2) {
+    console.log("restar los productos del stock y continuar.");
+  } else {
+    console.log("No agregar al carrito");
+  }
+};

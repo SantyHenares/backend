@@ -1,3 +1,5 @@
+// WebSocket
+
 const socket = io();
 
 const ContainerProductos = document.getElementById("product-container");
@@ -7,6 +9,8 @@ socket.on("productsRealTime", () => {
   listadoDeProductos(ContainerRealTime);
 });
 
+// Get File
+
 const getFile = async (path) => {
   const response = await fetch(path).then((res) => {
     return res.json();
@@ -14,8 +18,10 @@ const getFile = async (path) => {
   return response;
 };
 
+// Products
+
 const listadoDeProductos = async (container) => {
-  const data = await getFile("/movies.json");
+  const data = await getFile("/api/products");
 
   data.forEach((elem) => {
     const div = document.createElement("div");
@@ -25,10 +31,12 @@ const listadoDeProductos = async (container) => {
       <div class="card-body">
         <h5 class="card-title">${elem.title}</h5>
         <p class="card-text">$${elem.price}</p>
-        <a href="#" class="btn btn-primary">Ir a comprar</a>
+        <a id="${elem._id}" class="btn btn-primary">Agregar al carrito</a>
       </div>
     </div>`;
     container.appendChild(div);
+    const btnAgregar = document.getElementById(elem._id);
+    btnAgregar.addEventListener("click", () => addCart(elem._id));
   });
 };
 
@@ -36,6 +44,7 @@ listadoDeProductos(ContainerProductos);
 listadoDeProductos(ContainerRealTime);
 
 // Sign up form
+
 const elementExists = (id) => document.getElementById(id) !== null;
 
 elementExists("signup") &&
@@ -74,3 +83,16 @@ elementExists("send") &&
       .then((data) => console.log(data))
       .catch((error) => console.error(error));
   });
+
+// Cart
+
+const addCart = async (pid) => {
+  try {
+    const addCartProduct = await fetch(`/api/carts/${cid}/products/${pid}`, {
+      method: "PUT",
+    });
+    addCartProduct();
+  } catch (err) {
+    console.log(err);
+  }
+};

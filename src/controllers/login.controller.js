@@ -1,4 +1,5 @@
 import userModel from "../dao/models/user.model.js";
+import { isValidPassword } from "../utils.js";
 
 export const getLogin = async (req, res) => {
   const { email, password } = req.query;

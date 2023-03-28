@@ -8,6 +8,7 @@ import {
   deleteCartIdProductId,
   putCartId,
   putCartIdProductId,
+  getPurchase,
 } from "../controllers/cart.controller.js";
 
 const cartRouter = express.Router();
@@ -27,5 +28,7 @@ cartRouter.delete("/:cid/product/:pid", deleteCartIdProductId);
 cartRouter.put("/cid", putCartId);
 
 cartRouter.put("/:cid/products/:pid ", putCartIdProductId);
+
+cartRouter.get("/:cid/purchase", getPurchase);
 
 export default cartRouter;
