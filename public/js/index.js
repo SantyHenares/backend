@@ -2,8 +2,9 @@
 
 const socket = io();
 
-const ContainerProductos = document.getElementById("product-container");
-const ContainerRealTime = document.getElementById("realtime-container");
+// const ContainerProductos = document.getElementById("product-container");
+// const ContainerRealTime = document.getElementById("realtime-container");
+// const ContainerMocking = document.getElementById("mockingproduct-container");
 
 socket.on("productsRealTime", () => {
   listadoDeProductos(ContainerRealTime);
@@ -20,8 +21,9 @@ const getFile = async (path) => {
 
 // Products
 
-const listadoDeProductos = async (container) => {
-  const data = await getFile("/api/products");
+const listadoDeProductos = async (containerId, dataList) => {
+  const container = document.getElementById(containerId);
+  const data = await getFile(dataList);
 
   data.forEach((elem) => {
     const div = document.createElement("div");
@@ -40,8 +42,9 @@ const listadoDeProductos = async (container) => {
   });
 };
 
-listadoDeProductos(ContainerProductos);
-listadoDeProductos(ContainerRealTime);
+listadoDeProductos("product-container", "/api/products");
+listadoDeProductos("realtime-container", "/api/products");
+listadoDeProductos("mockingproduct-container", "/mockingproducts");
 
 // Sign up form
 
@@ -86,13 +89,13 @@ elementExists("send") &&
 
 // Cart
 
-const addCart = async (pid) => {
-  try {
-    const addCartProduct = await fetch(`/api/carts/${cid}/products/${pid}`, {
-      method: "PUT",
-    });
-    addCartProduct();
-  } catch (err) {
-    console.log(err);
-  }
-};
+// const addCart = async (pid) => {
+//   try {
+//     const addCartProduct = await fetch(`/api/carts/${cid}/products/${pid}`, {
+//       method: "PUT",
+//     });
+//     addCartProduct();
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };

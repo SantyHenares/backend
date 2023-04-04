@@ -3,6 +3,7 @@ import CartManager from "../dao/classes/CartManager.js";
 import { v4 } from "uuid";
 import path from "path";
 import cartModel from "../dao/models/cart.model.js";
+import productModel from "../dao/models/product.model.js";
 
 const cartManager = new CartManager(
   path.resolve(process.cwd(), "public", "carts.json")
@@ -113,8 +114,8 @@ export const deleteCartIdProductId = async (req, res) => {
     const productDelete = cart.product.deleteOne({ id: pid });
     const result = await cartModel.updateOne({ id: cid }, productDelete);
     res.send({ status: "success", payload: result });
-  } catch (err) {
-    res.status(500).send(err.message);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 };
 
@@ -123,9 +124,23 @@ export const putCartId = async (req, res) => {};
 export const putCartIdProductId = async (req, res) => {};
 
 export const getPurchase = async (req, res) => {
-  if ("2" == 2) {
-    console.log("restar los productos del stock y continuar.");
-  } else {
-    console.log("No agregar al carrito");
+  const cid = req.params.cid;
+
+  try {
+    const cart = await cartModel.findOne({ id: cid });
+    const products = await productModel.find();
+    cart.product.forEach((element) => {
+      if (products.stock >= element.cantidad) {
+        const result = products.updateOne(
+          products.stock,
+          products.stock - element.cantidad
+        );
+        res.send({ status: "success", payload: result });
+      } else {
+        console.log("No se agregó al proceso de compra.");
+      }
+    });
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 };

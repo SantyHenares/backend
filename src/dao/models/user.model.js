@@ -10,8 +10,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: String,
-  // age: Number,
-  // cart: id,
+  cart: String,
   // role: {
   //   type: String,
   //   default: 'user',

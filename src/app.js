@@ -4,6 +4,8 @@ import productsRouter from "./routes/products.js";
 import cartRouter from "./routes/cart.js";
 import loginRouter from "./routes/login.js";
 import signupRouter from "./routes/signup.js";
+import sessionRouter from "./routes/session.js";
+import mockingRouter from "./routes/mocking.js";
 import views from "./routes/views.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
@@ -59,6 +61,8 @@ app.use("/api/carts", cartRouter);
 app.use("/", views);
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
+app.use("/api/session", sessionRouter);
+app.use("/mockingproducts", mockingRouter);
 app.use(
   cors({
     origin: [
