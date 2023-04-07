@@ -3,8 +3,6 @@ import { listFakeProducts } from "../controllers/mocking.controller.js";
 
 const mockingRouter = express.Router();
 
-mockingRouter.get("/", async (req, res) => {
-  listFakeProducts;
-});
+mockingRouter.get("/", listFakeProducts);
 
 export default mockingRouter;

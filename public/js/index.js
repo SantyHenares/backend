@@ -44,7 +44,7 @@ const listadoDeProductos = async (containerId, dataList) => {
 
 listadoDeProductos("product-container", "/api/products");
 listadoDeProductos("realtime-container", "/api/products");
-listadoDeProductos("mockingproduct-container", "/mockingproducts");
+listadoDeProductos("mockingproduct-container", "/mocking");
 
 // Sign up form
 

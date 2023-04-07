@@ -62,7 +62,7 @@ app.use("/", views);
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 app.use("/api/session", sessionRouter);
-app.use("/mockingproducts", mockingRouter);
+app.use("/mocking", mockingRouter);
 app.use(
   cors({
     origin: [

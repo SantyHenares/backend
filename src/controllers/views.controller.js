@@ -13,3 +13,7 @@ export const getRenderProducts = (req, res) => {
 export const getRenderCartId = (req, res) => {
   res.render("carts", {});
 };
+
+export const getRenderMocking = (req, res) => {
+  res.render("mockingproducts", {});
+};
