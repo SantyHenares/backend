@@ -17,13 +17,17 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import inicializatePassport from "./config/passport.config.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
+// Configuración dotenv
 dotenv.config();
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_NAME = process.env.DB_NAME;
 const PORT = process.env.PORT;
 const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.ijkaujy.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+
+//Ejecución Servidor
 
 const app = express();
 const httpServer = app.listen(PORT, () => {
@@ -49,12 +53,20 @@ const environment = (async) => {
     error;
   }
 };
-
 environment();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(errorHandler);
+
+//handlebars
+
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./src/views");
+
+//Routes
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
@@ -63,6 +75,9 @@ app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 app.use("/api/session", sessionRouter);
 app.use("/mocking", mockingRouter);
+
+//Cors
+
 app.use(
   cors({
     origin: [
@@ -72,7 +87,21 @@ app.use(
     ],
   })
 );
+
+//cookies
+
 app.use(cookieParser());
+app.get("/setSignedCookie", (req, res) => {
+  res.cookie("ejemplocookie", "cookie", {
+    maxAge: 10000,
+    httpOnly: true,
+    signed: true,
+  });
+  res.send("cookie seteada");
+});
+
+//Session
+
 app.use(
   session({
     store: MongoStore.create({
@@ -85,18 +114,12 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+//Passport
+
 inicializatePassport();
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.get("/setSignedCookie", (req, res) => {
-  res.cookie("ejemplocookie", "cookie", {
-    maxAge: 10000,
-    httpOnly: true,
-    signed: true,
-  });
-  res.send("cookie seteada");
-});
 
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -107,10 +130,6 @@ app.get("/logout", (req, res) => {
     }
   });
 });
-
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
-app.set("views", "./src/views");
 
 socketServer.on("connection", (socket) => {
   console.log("Nuevo cliente conectado.");

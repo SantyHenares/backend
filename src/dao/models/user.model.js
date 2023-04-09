@@ -8,13 +8,22 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
+    required: true,
   },
-  password: String,
-  cart: String,
-  // role: {
-  //   type: String,
-  //   default: 'user',
-  // },
+  password: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "carts",
+  },
+  rol: {
+    type: String,
+    required: true,
+    enum: ["usuario", "admin"],
+    default: "usuario",
+  },
 });
 
 const userModel = mongoose.model(userCollection, userSchema);

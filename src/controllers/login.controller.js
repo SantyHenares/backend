@@ -1,5 +1,8 @@
 import userModel from "../dao/models/user.model.js";
 import { isValidPassword } from "../utils.js";
+import { CustomError } from "../services/error/customError.js";
+import { generateLoginErrorInfo } from "../services/error/loginErrorMsg.js";
+import { EError } from "../enums/EError.js";
 
 export const getLogin = async (req, res) => {
   const { email, password } = req.query;
@@ -25,8 +28,14 @@ export const postLogin = async (req, res) => {
 
   try {
     if (!email || !password) {
-      res.status(400).send({ status: "error", error: "Faltan datos" });
-      return;
+      // res.status(400).send({ status: "error", error: "Faltan datos" });
+      // return;
+      CustomError.createError({
+        name: "Login error",
+        cause: generateLoginErrorInfo(req.body),
+        message: "Error al loggear",
+        errorCode: EError.INVALID_TYPES,
+      });
     }
     const user = await userModel.findOne({ email: email });
     if (!user) {
