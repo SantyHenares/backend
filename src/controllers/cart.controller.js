@@ -4,6 +4,7 @@ import { v4 } from "uuid";
 import path from "path";
 import cartModel from "../dao/models/cart.model.js";
 import productModel from "../dao/models/product.model.js";
+import ticketModel from "../dao/models/ticket.model.js";
 
 const cartManager = new CartManager(
   path.resolve(process.cwd(), "public", "carts.json")
@@ -24,8 +25,8 @@ export const getCart = async (req, res) => {
 
 export const postCart = async (req, res) => {
   const newCart = {
-    id: v4(),
     products: [],
+    user: user.mail,
   };
 
   try {
@@ -62,30 +63,30 @@ export const getCartId = async (req, res) => {
   }
 };
 
-export const getCartIdProductId = async (req, res) => {
+export const postCartIdProductId = async (req, res) => {
   const { cid, pid } = req.params;
 
   try {
     const carts = await cartManager.getAll();
-    const cart = carts.find((cart) => cart.id === cid);
+    const cart = carts.find((cart) => cart._id === cid);
     if (!cart) {
       res.status(404).send("Carrito no encontrado");
       return;
     }
     const products = await productManager.getProducts();
-    const product = products.find((product) => product.id == pid);
+    const product = products.find((product) => product._id == pid);
     if (!product) {
       res.status(404).send("Producto no encontrado");
       return;
     }
-    const productInCart = cart.products.find((product) => product.id === pid);
+    const productInCart = cart.products.find((product) => product._id === pid);
     if (productInCart) {
       productInCart.quantity++;
       await cartManager.writeAll(carts);
       res.send("Producto agregado al carrito");
       return;
     } else {
-      cart.products.push({ id: pid, quantity: 1 });
+      cart.products.push({ _id: pid, quantity: 1 });
       await cartManager.writeAll(carts);
       res.send("Producto agregado al carrito");
       return;
@@ -99,7 +100,7 @@ export const deleteCartId = async (req, res) => {
   const cid = req.params;
 
   try {
-    const result = await cartModel.deleteOne({ id: cid });
+    const result = await cartModel.deleteOne({ _id: cid });
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
@@ -110,9 +111,9 @@ export const deleteCartIdProductId = async (req, res) => {
   const cid = req.params.cid;
   const pid = req.params.pid;
   try {
-    const cart = await cartModel.findOne({ id: cid });
-    const productDelete = cart.product.deleteOne({ id: pid });
-    const result = await cartModel.updateOne({ id: cid }, productDelete);
+    const cart = await cartModel.findOne({ _id: cid });
+    const productDelete = cart.product.deleteOne({ _id: pid });
+    const result = await cartModel.updateOne({ _id: cid }, productDelete);
     res.send({ status: "success", payload: result });
   } catch (error) {
     res.status(500).send(error.message);
@@ -127,20 +128,45 @@ export const getPurchase = async (req, res) => {
   const cid = req.params.cid;
 
   try {
-    const cart = await cartModel.findOne({ id: cid });
-    const products = await productModel.find();
-    cart.product.forEach((element) => {
-      if (products.stock >= element.cantidad) {
-        const result = products.updateOne(
-          products.stock,
-          products.stock - element.cantidad
+    let amount = 0;
+    const cart = await cartModel.findOne({ _id: cid });
+    const listProduct = await productModel.find();
+
+    // Actualizar stock y calcular el total de la compra
+
+    for (const element of cart.product) {
+      const product = listProduct.find((p) => p._id === element._id);
+      if (product.stock >= element.cantidad) {
+        await productModel.updateOne(
+          { _id: element._id },
+          { stock: product.stock - element.cantidad }
         );
-        res.send({ status: "success", payload: result });
+        amount += element.price * element.cantidad;
+        await cartModel.updateOne(
+          { _id: cart._id },
+          { $pull: { product: { _id: element._id } } }
+        );
       } else {
-        console.log("No se agregó al proceso de compra.");
+        console.log(element.name + " no se agregó al proceso de compra.");
       }
+    }
+
+    // Crear y guardar el ticket de compra
+
+    const newTicket = {
+      code: v4(),
+      purchase_datetime: moment().format("LLL"),
+      amount: amount,
+      purchase: cart.mail,
+    };
+    await ticketModel.insert(newTicket);
+
+    res.send({
+      status: "success",
+      payload: newTicket,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error.message);
   }
 };

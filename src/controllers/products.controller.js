@@ -17,7 +17,7 @@ export const getProducts = async (req, res) => {
 export const getProductsId = async (req, res) => {
   const pid = req.params.pid;
   try {
-    const product = await productModel.findOne({ id: pid });
+    const product = await productModel.findOne({ _id: pid });
     if (!product) {
       res.status(404).send("Producto no encontrado");
       return;
@@ -54,7 +54,7 @@ export const putProducts = async (req, res) => {
   const updateProduct = req.body;
 
   try {
-    const result = await productModel.updateOne({ id: pid }, updateProduct);
+    const result = await productModel.updateOne({ _id: pid }, updateProduct);
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
@@ -64,7 +64,7 @@ export const putProducts = async (req, res) => {
 export const deleteProducts = async (req, res) => {
   const pid = req.params;
   try {
-    const result = await productModel.deleteOne({ id: pid });
+    const result = await productModel.deleteOne({ _id: pid });
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);

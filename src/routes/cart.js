@@ -3,13 +3,14 @@ import {
   getCart,
   postCart,
   getCartId,
-  getCartIdProductId,
+  postCartIdProductId,
   deleteCartId,
   deleteCartIdProductId,
   putCartId,
   putCartIdProductId,
   getPurchase,
 } from "../controllers/cart.controller.js";
+import { isUsuarioRole } from "../middlewares/auth.js";
 
 const cartRouter = express.Router();
 
@@ -19,7 +20,7 @@ cartRouter.post("/", postCart);
 
 cartRouter.get("/:cid", getCartId);
 
-cartRouter.post("/:cid/product/:pid", getCartIdProductId);
+cartRouter.post("/:cid/product/:pid", isUsuarioRole, postCartIdProductId);
 
 cartRouter.delete("/:cid", deleteCartId);
 

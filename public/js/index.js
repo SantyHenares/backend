@@ -87,15 +87,8 @@ elementExists("send") &&
       .catch((error) => console.error(error));
   });
 
-// Cart
+// Finalizar compra
 
-// const addCart = async (pid) => {
-//   try {
-//     const addCartProduct = await fetch(`/api/carts/${cid}/products/${pid}`, {
-//       method: "PUT",
-//     });
-//     addCartProduct();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const finalizarCompra = () => {
+  //dar ticket, sacar los productos con stock del carrito e ir a inicio
+};

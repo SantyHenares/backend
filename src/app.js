@@ -10,7 +10,6 @@ import views from "./routes/views.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import userModel from "./dao/models/user.model.js";
-import * as dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -18,17 +17,11 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import inicializatePassport from "./config/passport.config.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-
-// Configuración dotenv
-dotenv.config();
-const DB_USER = process.env.DB_USER;
-const DB_PASS = process.env.DB_PASS;
-const DB_NAME = process.env.DB_NAME;
-const PORT = process.env.PORT;
-const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.ijkaujy.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+import { options } from "./config/options.js";
 
 //Ejecución Servidor
 
+const PORT = options.server.port;
 const app = express();
 const httpServer = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -37,7 +30,7 @@ const socketServer = new Server(httpServer);
 
 const environment = (async) => {
   try {
-    mongoose.connect(STRING_CONNECTION, (error) => {
+    mongoose.connect(options.mongoDB.url, (error) => {
       if (error) {
         process.exit();
       } else {
@@ -105,11 +98,11 @@ app.get("/setSignedCookie", (req, res) => {
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl: STRING_CONNECTION,
+      mongoUrl: options.mongoDB.url,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       ttl: 15,
     }),
-    secret: "lasbdljasd",
+    secret: options.server.secretSession,
     resave: false,
     saveUninitialized: false,
   })
