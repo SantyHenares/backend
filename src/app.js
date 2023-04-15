@@ -18,6 +18,7 @@ import passport from "passport";
 import inicializatePassport from "./config/passport.config.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { options } from "./config/options.js";
+import { addlogger } from "./middlewares/logger.js";
 
 //Ejecución Servidor
 
@@ -52,6 +53,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(errorHandler);
+app.use(addlogger);
 
 //handlebars
 
@@ -68,6 +70,15 @@ app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 app.use("/api/session", sessionRouter);
 app.use("/mocking", mockingRouter);
+app.get("/loggerTest", (req, res) => {
+  req.logger.fatal("error fatal");
+  req.logger.error("mensaje de error");
+  req.logger.warning("advertencia");
+  req.logger.info("ruta solicitada");
+  req.logger.http("mensaje de ruta");
+  req.logger.debug("mensaje de prueba ignorado");
+  res.send("Utilizando logger");
+});
 
 //Cors
 
