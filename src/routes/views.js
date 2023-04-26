@@ -5,6 +5,8 @@ import {
   getRenderCartId,
   getRenderProducts,
   getRenderMocking,
+  getForgotPassword,
+  getResetPassword,
 } from "../controllers/views.controller.js";
 
 const router = express.Router();
@@ -18,5 +20,9 @@ router.get("/products", getRenderProducts);
 router.get("/carts/:cid", getRenderCartId);
 
 router.get("/mockingproducts", getRenderMocking);
+
+router.get("/forgot-password", getForgotPassword);
+
+router.get("/reset-password", getResetPassword);
 
 export default router;

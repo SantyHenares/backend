@@ -6,6 +6,7 @@ import loginRouter from "./routes/login.js";
 import signupRouter from "./routes/signup.js";
 import sessionRouter from "./routes/session.js";
 import mockingRouter from "./routes/mocking.js";
+import userRouter from "./routes/users.js";
 import views from "./routes/views.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
@@ -53,7 +54,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(errorHandler);
-app.use(addlogger);
+// app.use(addlogger);
 
 //handlebars
 
@@ -65,6 +66,7 @@ app.set("views", "./src/views");
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
+app.use("/api/users", userRouter);
 app.use("/", views);
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);

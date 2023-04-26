@@ -8,10 +8,17 @@ const productsSchema = new mongoose.Schema({
   price: Number,
   description: String,
   year: Number,
-  genre: String,
+  genre: {
+    type: String,
+    enum: ["comedia", "horror", "animación", "drama", "romance", "acción"],
+  },
   image: String,
   rate: Number,
   stock: Number,
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+  },
 });
 
 const productModel = mongoose.model(productsCollection, productsSchema);

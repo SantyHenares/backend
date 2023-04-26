@@ -1,4 +1,11 @@
 import productModel from "../dao/models/product.model.js";
+// import {
+//   getAllProducts,
+//   getProductsByid,
+//   createProduct,
+//   updateProduct,
+//   deleteOneProduct,
+// } from "../dao/repository/products.repository.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -41,6 +48,7 @@ export const getProductsId = async (req, res) => {
 
 export const postProducts = async (req, res) => {
   const newProduct = req.body;
+  newProduct.owner = req.user._id;
   try {
     const result = await productModel.insertMany(newProduct);
     res.send({ status: "success", payload: result });
@@ -64,8 +72,18 @@ export const putProducts = async (req, res) => {
 export const deleteProducts = async (req, res) => {
   const pid = req.params;
   try {
-    const result = await productModel.deleteOne({ _id: pid });
-    res.send({ status: "success", payload: result });
+    if (
+      (req.user.rol === "premium" && product.owner == req.user._id) ||
+      req.user.rol === "admin"
+    ) {
+      const result = await productModel.deleteOne({ _id: pid });
+      res.send({ status: "success", payload: result });
+    } else {
+      res.json({
+        status: "error",
+        message: "No tienes permisos para borrar este producto",
+      });
+    }
   } catch (err) {
     res.status(500).send(err.message);
   }

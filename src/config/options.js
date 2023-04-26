@@ -7,6 +7,9 @@ const DB_NAME = process.env.DB_NAME;
 const PORT = process.env.PORT;
 const SECRET_SESSION = process.env.SECRET_SESSION;
 const NODE_ENV = process.env.NODE_ENV;
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
+const ADMIN_GMAIL = process.env.ADMIN_GMAIL;
+const ADMIN_GMAIL_PASS = process.env.ADMIN_PASS;
 
 export const options = {
   mongoDB: {
@@ -15,8 +18,13 @@ export const options = {
   server: {
     port: PORT,
     secretSession: SECRET_SESSION,
+    tokenKey: TOKEN_SECRET,
   },
   logger: {
     nodeEnv: NODE_ENV,
+  },
+  gmail: {
+    adminGmail: ADMIN_GMAIL,
+    adminPass: ADMIN_GMAIL_PASS,
   },
 };

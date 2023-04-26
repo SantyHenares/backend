@@ -2,10 +2,6 @@
 
 const socket = io();
 
-// const ContainerProductos = document.getElementById("product-container");
-// const ContainerRealTime = document.getElementById("realtime-container");
-// const ContainerMocking = document.getElementById("mockingproduct-container");
-
 socket.on("productsRealTime", () => {
   listadoDeProductos(ContainerRealTime);
 });

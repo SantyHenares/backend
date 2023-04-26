@@ -30,7 +30,7 @@ export const postCart = async (req, res) => {
   };
 
   try {
-    const result = await cartModel.create(newCart);
+    const result = await cartModel.insertOne(newCart);
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
@@ -41,7 +41,7 @@ export const getCartId = async (req, res) => {
   const cid = req.params;
 
   try {
-    const cart = await cartModel.find(cid);
+    const cart = await cartModel.find({ _id: cid });
     if (!cart) {
       res.status(404).send("Producto no encontrado");
       return;

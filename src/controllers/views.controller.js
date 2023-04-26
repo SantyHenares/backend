@@ -17,3 +17,12 @@ export const getRenderCartId = (req, res) => {
 export const getRenderMocking = (req, res) => {
   res.render("mockingproducts", {});
 };
+
+export const getForgotPassword = (req, res) => {
+  res.render("forgotPassword", {});
+};
+
+export const getResetPassword = (req, res) => {
+  const token = req.query.token;
+  res.render("resetPassword", { token });
+};
