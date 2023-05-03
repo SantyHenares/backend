@@ -30,7 +30,7 @@ cartRouter.delete("/:cid", deleteCartId);
 
 cartRouter.delete("/:cid/product/:pid", deleteCartIdProductId);
 
-cartRouter.put("/cid", putCartId);
+cartRouter.put("/:cid", putCartId);
 
 cartRouter.put("/:cid/products/:pid ", putCartIdProductId);
 

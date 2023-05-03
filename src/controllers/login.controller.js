@@ -73,9 +73,7 @@ export const postForgotPass = async (req, res) => {
     }
     const token = generateEmailToken(user.email, 600);
     await sendRecoveryEmail(email, token);
-    res.send(
-      "<p>Fue enviado el correo con las instrucciones para restablecer la contraseña</p>"
-    );
+    res.send(token);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -87,7 +85,6 @@ export const postResetPass = async (req, res) => {
     const { email, newPassword } = req.body;
     //validar que el token sea valido.
     const validEmail = verifyEmailToken(token);
-    console.log(validEmail);
     if (!validEmail) {
       return res.send(
         `El enlace caduco o no es valido, <a href="/forgot-password">intentar de nuevo</a>`

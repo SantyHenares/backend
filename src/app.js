@@ -20,6 +20,8 @@ import inicializatePassport from "./config/passport.config.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { options } from "./config/options.js";
 import { addlogger } from "./middlewares/logger.js";
+import { swaggerSpecs } from "./config/docConfig.js";
+import swaggerUi from "swagger-ui-express";
 
 //Ejecución Servidor
 
@@ -81,6 +83,7 @@ app.get("/loggerTest", (req, res) => {
   req.logger.debug("mensaje de prueba ignorado");
   res.send("Utilizando logger");
 });
+app.use("/api/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
 
 //Cors
 
