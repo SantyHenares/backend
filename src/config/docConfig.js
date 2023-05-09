@@ -1,5 +1,5 @@
 import __dirname from "../utils.js";
-import swaggerJSDoc from "swagger-jsdoc";
+import swaggerJsDoc from "swagger-jsdoc";
 import path from "path";
 
 const swaggerOptions = {
@@ -15,4 +15,4 @@ const swaggerOptions = {
 };
 
 //crear una variable que interpreta las opciones para trabajar con swagger
-export const swaggerSpecs = swaggerJSDoc(swaggerOptions);
+export const swaggerSpecs = swaggerJsDoc(swaggerOptions);

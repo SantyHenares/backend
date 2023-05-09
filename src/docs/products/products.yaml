@@ -1,0 +1,183 @@
+paths:
+  /api/products/:
+    get:
+      summary: "Obtiene todos los productos"
+      tags:
+        - product
+      responses:
+        "200":
+          description: "Productos obtenidos correctamente."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/products"
+        "500":
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
+    post:
+      summary: "Crea un nuevo producto"
+      tags:
+        - product
+      responses:
+        "200":
+          description: "Crea un producto correctamente."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        "500":
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
+
+  /api/products/{pid}:
+    get:
+      summary: "Obtiene un unico producto por su id"
+      tags:
+        - product
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: "id del producto que se quiere consultar"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "producto obtenido correctamente."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        "500":
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
+    put:
+      summary: "Actualizar un producto por el id"
+      tags:
+        - product
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: "id del producto que se quiere actualizar."
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: "producto actualizado correctamente"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        "500":
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
+    delete:
+      summary: "Borrar un producto por el id"
+      tags:
+        - product
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: "id del producto que se quiere borrar."
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "producto borrado correctamente"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+        "500":
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
+
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Id generado por la base de datos."
+        title:
+          type: string
+          description: "Titulo del producto"
+        price:
+          type: number
+          description: "Precio del producto"
+        description:
+          type: string
+          description: "Descripcion del producto"
+        year:
+          type: number
+          description: "Año del producto"
+        genre:
+          type: array
+          description: "Genero del producto"
+        image:
+          type: string
+          description: "Imagen del producto"
+        rate:
+          type: number
+          description: "Puntuacion del producto"
+        stock:
+          type: number
+          description: "Cantidad de elementos disponibles"
+        owner:
+          type: string
+          description: "Creador del producto"
+      example:
+        _id: ObjectId("kajhd9127kajsh812asds23423")
+          title: Christine
+          price: 15
+          description: Geeky student Arnie Cunningham falls for Christine, a rusty 1958 Plymouth Fury, and becomes obsessed with restoring the classic automobile to her former glory. As the car changes, so does Arnie, whose newfound confidence turns to arrogance behind the wheel of his exotic beauty. Arnie’s girlfriend Leigh and best friend Dennis reach out to him, only to be met by a Fury like no other.
+          year: 1983
+          genre: ["horror"]
+          image: https://a.ltrbxd.com/resized/film-poster/4/7/6/1/5/47615-christine-0-230-0-345-crop.jpg?v=368af14bb5
+          rate: 3.5
+          stock: 10
+          owner: tisanhenares@gmail.com
+    requestBodies:
+      updateProduct:
+        type: object
+        properties:
+        title:
+          type: string
+          description: "Titulo del producto"
+        price:
+          type: number
+          description: "Precio del producto"
+        description:
+          type: string
+          description: "Descripcion del producto"
+        year:
+          type: number
+          description: "Año del producto"
+        genre:
+          type: array
+          description: "Genero del producto"
+        image:
+          type: string
+          description: "Imagen del producto"
+        rate:
+          type: number
+          description: "Puntuacion del producto"
+        stock:
+          type: number
+          description: "Cantidad de elementos disponibles"
+      example:
+        title: Christine
+        price: 15
+        description: Geeky student Arnie Cunningham falls for Christine, a rusty 1958 Plymouth Fury, and becomes obsessed with restoring the classic automobile to her former glory. As the car changes, so does Arnie, whose newfound confidence turns to arrogance behind the wheel of his exotic beauty. Arnie’s girlfriend Leigh and best friend Dennis reach out to him, only to be met by a Fury like no other.
+        year: 1983
+        genre: ["horror"]
+        image: https://a.ltrbxd.com/resized/film-poster/4/7/6/1/5/47615-christine-0-230-0-345-crop.jpg?v=368af14bb5
+        rate: 3.5
+        stock: 10
+

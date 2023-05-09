@@ -1,57 +1,55 @@
 paths:
   /api/carts/:
     get:
-      summary: Obtiene todos los carritos
+      summary: "Obtiene todos los carritos"
       tags:
         - cart
-      responce:
+      responses:
         "200":
-          description: Carritos obtenidos correctamente.
+          description: "Carritos obtenidos correctamente."
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#components/schemas/cart"
+                  $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
     post:
-      summary: Crea un nuevo carrito
+      summary: "Crea un nuevo carrito"
       tags:
         - cart
-      responce:
+      responses:
         "200":
-          description: Crea un carrito correctamente.
+          description: "Crea un carrito correctamente."
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#components/schemas/cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
 
-  /api/carts/cid:
+  /api/carts/{cid}:
     get:
-      summary: Obtiene un unico carrito por su id
+      summary: "Obtiene un unico carrito por su id"
       tags:
         - cart
       parameters:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere consultar
+          description: "id del carrito que se quiere consultar"
           schema:
             type: string
-      responce:
+      responses:
         "200":
-          description: Carrito obtenido correctamente.
+          description: "Carrito obtenido correctamente."
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
     put:
       summary: "Actualizar un carrito por el id"
       tags:
@@ -60,13 +58,13 @@ paths:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere actualizar
+          description: "id del carrito que se quiere actualizar."
           schema:
             type: string
       requestBody:
         required: true
         content:
-          appplication/json:
+          application/json:
             schema:
               $ref: "#components/requestBodies/updateCart"
       responses:
@@ -75,9 +73,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
     delete:
       summary: "Borrar un carrito por el id"
       tags:
@@ -86,52 +84,46 @@ paths:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere borrar
+          description: "id del carrito que se quiere borrar."
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          appplication/json:
-            schema:
-              $ref: "#components/requestBodies/deleteCart"
       responses:
         "200":
           description: "Carrito borrado correctamente"
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
 
-  /api/carts/:cid/product/:pid:
+  /api/carts/{cid}/product/{pid}:
     get:
-      summary: Obtiene un unico producto del carrito por su id
+      summary: "Obtiene un unico producto del carrito por su id"
       tags:
         - cart
       parameters:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere consultar
+          description: "id del carrito que se quiere consultar."
           schema:
             type: string
         - name: pid
           in: path
           required: true
-          description: id del producto que se quiere consultar
+          description: "id del producto que se quiere consultar."
           schema:
             type: string
-      responce:
+      responses:
         "200":
-          description: Producto del carrito obtenido correctamente.
+          description: "Producto del carrito obtenido correctamente."
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
     put:
       summary: "Actualizar un producto del carrito por el id"
       tags:
@@ -140,30 +132,30 @@ paths:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere consultar
+          description: "id del carrito que se quiere consultar."
           schema:
             type: string
         - name: pid
           in: path
           required: true
-          description: id del producto del carrito que se quiere actualizar
+          description: "id del producto del carrito que se quiere actualizar."
           schema:
             type: string
       requestBody:
         required: true
         content:
-          appplication/json:
+          application/json:
             schema:
-              $ref: "#components/requestBodies/updateCart"
+              $ref: "#components/requestBodies/updateProductCart"
       responses:
         "200":
           description: "Producto del carrito actualizado correctamente"
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
     delete:
       summary: "Borrar un producto del carrito por el id"
       tags:
@@ -172,30 +164,24 @@ paths:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere consultar
+          description: "id del carrito que se quiere consultar."
           schema:
             type: string
         - name: pid
           in: path
           required: true
-          description: id del producto del carrito que se quiere borrar
+          description: "id del producto del carrito que se quiere borrar."
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          appplication/json:
-            schema:
-              $ref: "#components/requestBodies/deleteCart"
       responses:
         "200":
           description: "Producto del carrito borrado correctamente"
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/Cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
 
   /api/carts/:cid/purchase:
     get:
@@ -206,18 +192,18 @@ paths:
         - name: cid
           in: path
           required: true
-          description: id del carrito que se quiere consultar
+          description: "id del carrito que se quiere consultar."
           schema:
             type: string
-      responce:
+      responses:
         "200":
-          description: Carrito obtenido correctamente.
+          description: "Carrito obtenido correctamente."
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/cart"
+                $ref: "#/components/schemas/cart"
         "500":
-          description: hubo un error en el servidor, usualmente por un proceso defectuoso
+          description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
 
 components:
   schemas:
@@ -226,14 +212,24 @@ components:
       properties:
         _id:
           type: string
-          description: "id generado por la base de datos."
+          description: "Id generado por la base de datos."
         product:
           type: array
           description: "Lista de productos en el carrito."
+          items:
+            type: string
         user:
           type: string
-          description: "Usuario propietario del carrito"
+          description: "Usuario propietario del carrito."
       example:
         _id: ObjectId("kajhd9127kajsh812asds23423")
-        product: [peli1, peli2, peli3]
-        user: user@gmail.com
+        product: ["peli1", "peli2", "peli3"]
+        user: "user@gmail.com"
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+
+    updateProductCart:
+      type: object
+      properties:
