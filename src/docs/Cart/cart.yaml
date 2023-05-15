@@ -66,7 +66,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#components/requestBodies/updateCart"
+              $ref: "#/components/schemas/cart"
       responses:
         "200":
           description: "Carrito actualizado correctamente"
@@ -146,7 +146,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#components/requestBodies/updateProductCart"
+              $ref: "#/components/schemas/cart"
       responses:
         "200":
           description: "Producto del carrito actualizado correctamente"
@@ -183,7 +183,7 @@ paths:
         "500":
           description: "Hubo un error en el servidor, usualmente por un proceso defectuoso."
 
-  /api/carts/:cid/purchase:
+  /api/carts/{cid}/purchase:
     get:
       summary: Obtiene un tiket del carrito seleccionado
       tags:
@@ -225,11 +225,3 @@ components:
         _id: ObjectId("kajhd9127kajsh812asds23423")
         product: ["peli1", "peli2", "peli3"]
         user: "user@gmail.com"
-  requestBodies:
-    updateCart:
-      type: object
-      properties:
-
-    updateProductCart:
-      type: object
-      properties:
