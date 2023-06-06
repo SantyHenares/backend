@@ -6,7 +6,7 @@ import {
   putProducts,
   deleteProducts,
 } from "../controllers/products.controller.js";
-import { isAdminRole, checkRoles } from "../middlewares/auth.js";
+import { checkRoles } from "../middlewares/auth.js";
 
 const productsRouter = express.Router();
 

@@ -2,7 +2,6 @@ import express from "express";
 import {
   getCart,
   postCart,
-  getCartId,
   postCartIdProductId,
   deleteCartId,
   deleteCartIdProductId,
@@ -10,15 +9,13 @@ import {
   putCartIdProductId,
   getPurchase,
 } from "../controllers/cart.controller.js";
-import { isUsuarioRole, checkRoles } from "../middlewares/auth.js";
+import { checkRoles } from "../middlewares/auth.js";
 
 const cartRouter = express.Router();
 
-cartRouter.get("/", getCart);
-
 cartRouter.post("/", postCart);
 
-cartRouter.get("/:cid", getCartId);
+cartRouter.get("/:cid", getCart);
 
 cartRouter.post(
   "/:cid/product/:pid",

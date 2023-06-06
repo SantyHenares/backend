@@ -1,27 +1,27 @@
 <section class="h-100 d-flex justify-content-center pt-5 bg-dark">
-    <form class="login-container bg-light">
+    <div class="login-container bg-light">
+    <form method="post" action="/login">
         <h1 class="p-3">Login</h1>
         <!-- Email input -->
         <div class="form-outline mb-4">
-            <input type="email" id="login-email" class="form-control" />
-            <label class="form-label" for="login-email">Email address</label>
+            <input type="email" class="form-control" placeholder="Email address" name="email"/>
         </div>
 
         <!-- Password input -->
         <div class="form-outline mb-4">
-            <input type="password" id="login-password" class="form-control" />
-            <label class="form-label" for="login-password">Password</label>
+            <input type="password" class="form-control" placeholder="contrasena" name="password"/>
         </div>
 
         <!-- Submit button -->
-        <button type="button" id="send" class="btn btn-primary btn-block mb-4">Sign in</button>
-
-        <!-- Register buttons -->
-        <div class="text-center">
-            <p>Not a member? <a href="signup">Register</a></p>
-        </div>
-        <div>
-            <a href="forgot-password">¿Olvidaste tu contraseña?</a>
-        </div>
+        <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
     </form>
+    <!-- Register buttons -->
+    <div class="text-center">
+        <p>Not a member? <a href="signup">Register</a></p>
+    </div>
+    <div>
+        <a href="forgot-password">¿Olvidaste tu contraseña?</a>
+    </div>
+    
+    </div>
 </section>

@@ -29,59 +29,18 @@ const listadoDeProductos = async (containerId, dataList) => {
       <div class="card-body">
         <h5 class="card-title">${elem.title}</h5>
         <p class="card-text">$${elem.price}</p>
-        <a id="${elem._id}" class="btn btn-primary">Agregar al carrito</a>
+        <a href="/products/${elem._id}" class="btn btn-primary">Agregar al carrito</a>
       </div>
     </div>`;
     container.appendChild(div);
-    const btnAgregar = document.getElementById(elem._id);
-    btnAgregar.addEventListener("click", () => addCart(elem._id));
+    // const btnAgregar = document.getElementById(elem._id);
+    // btnAgregar.addEventListener("click", () => addCart(elem._id));
   });
 };
 
 listadoDeProductos("product-container", "/api/products");
 listadoDeProductos("realtime-container", "/api/products");
 listadoDeProductos("mockingproduct-container", "/mocking");
-
-// Sign up form
-
-const elementExists = (id) => document.getElementById(id) !== null;
-
-elementExists("signup") &&
-  document.getElementById("signup").addEventListener("click", function () {
-    const myForm = document.getElementById("myForm");
-    const formData = new FormData(myForm);
-    const data = Object.fromEntries(formData);
-
-    fetch("/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
-  });
-
-// Login form
-
-elementExists("send") &&
-  document.getElementById("send").addEventListener("click", function () {
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-
-    fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
-  });
 
 // Finalizar compra
 

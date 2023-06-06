@@ -11,7 +11,6 @@ const swaggerOptions = {
       description: "Definicion de endpoints para la API de mi proyecto final",
     },
   },
-  //apis: [`${path.join(__dirname, "../docs/**/*.yaml")}`],
   apis: ["./src/docs/**/*.yaml"],
 };
 

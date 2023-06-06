@@ -1,15 +1,8 @@
-import productModel from "../dao/models/product.model.js";
-// import {
-//   getAllProducts,
-//   getProductsByid,
-//   createProduct,
-//   updateProduct,
-//   deleteOneProduct,
-// } from "../dao/repository/products.repository.js";
+import { productService } from "../dao/repository/index.repository.js";
 
 export const getProducts = async (req, res) => {
   try {
-    let products = await productModel.find();
+    let products = await productService.getProducts();
     const limit = req.query.limit;
     let limitedProducts;
     if (limit) {
@@ -22,9 +15,9 @@ export const getProducts = async (req, res) => {
 };
 
 export const getProductsId = async (req, res) => {
-  const pid = req.params.pid;
+  const { pid } = req.params;
   try {
-    const product = await productModel.findOne({ _id: pid });
+    const product = await productService.getProductById(pid);
     if (!product) {
       res.status(404).send("Producto no encontrado");
       return;
@@ -48,9 +41,11 @@ export const getProductsId = async (req, res) => {
 
 export const postProducts = async (req, res) => {
   const newProduct = req.body;
+  newProduct.price = Number(newProduct.price);
+  newProduct.stock = Number(newProduct.stock);
   newProduct.owner = req.user._id;
   try {
-    const result = await productModel.insertMany(newProduct);
+    const result = await productService.addProduct(newProduct);
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
@@ -60,9 +55,13 @@ export const postProducts = async (req, res) => {
 export const putProducts = async (req, res) => {
   const { pid } = req.params;
   const updateProduct = req.body;
-
+  updateProduct.price = Number(updateProduct.price);
+  updateProduct.stock = Number(updateProduct.stock);
   try {
-    const result = await productModel.updateOne({ _id: pid }, updateProduct);
+    const result = await productService.updateProduct(
+      { _id: pid },
+      updateProduct
+    );
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
@@ -76,7 +75,7 @@ export const deleteProducts = async (req, res) => {
       (req.user.rol === "premium" && product.owner == req.user._id) ||
       req.user.rol === "admin"
     ) {
-      const result = await productModel.deleteOne({ _id: pid });
+      const result = await productService.deleteProduct({ _id: pid });
       res.send({ status: "success", payload: result });
     } else {
       res.json({

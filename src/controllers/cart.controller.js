@@ -1,22 +1,12 @@
-import ProductManager from "../dao/classes/ProductManager.js";
-import CartManager from "../dao/classes/CartManager.js";
 import { v4 } from "uuid";
-import path from "path";
-import cartModel from "../dao/models/cart.model.js";
+import { cartService } from "../dao/repository/index.repository.js";
 import productModel from "../dao/models/product.model.js";
 import ticketModel from "../dao/models/ticket.model.js";
 
-const cartManager = new CartManager(
-  path.resolve(process.cwd(), "public", "carts.json")
-);
-
-const productManager = new ProductManager(
-  path.resolve(process.cwd(), "public", "products.json")
-);
-
 export const getCart = async (req, res) => {
   try {
-    const cart = await cartModel.find();
+    const cid = req.params.cid;
+    const cart = await cartService.getCartById(cid);
     res.send({ payload: cart });
   } catch (err) {
     res.status(500).send(err.message);
@@ -24,75 +14,27 @@ export const getCart = async (req, res) => {
 };
 
 export const postCart = async (req, res) => {
-  const newCart = {
-    products: [],
-    user: user.mail,
-  };
-
   try {
-    const result = await cartModel.insertOne(newCart);
+    const result = await cartService.createCart();
     res.send({ status: "success", payload: result });
   } catch (err) {
     res.status(500).send(err.message);
   }
 };
 
-export const getCartId = async (req, res) => {
-  const cid = req.params;
-
-  try {
-    const cart = await cartModel.find({ _id: cid });
-    if (!cart) {
-      res.status(404).send("Producto no encontrado");
-      return;
-    }
-    res.send({
-      status: "success",
-      payload: cart,
-      totalPages: 1,
-      prevPage: 1,
-      nextPage: 1,
-      page: 1,
-      hasPrevPage: false,
-      hasNextPage: false,
-      prevLink: null,
-      nextLink: null,
-    });
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
-
 export const postCartIdProductId = async (req, res) => {
-  const { cid, pid } = req.params;
-
   try {
-    const carts = await cartManager.getAll();
-    const cart = carts.find((cart) => cart._id === cid);
-    if (!cart) {
-      res.status(404).send("Carrito no encontrado");
-      return;
-    }
-    const products = await productManager.getProducts();
-    const product = products.find((product) => product._id == pid);
-    if (!product) {
-      res.status(404).send("Producto no encontrado");
-      return;
-    }
-    const productInCart = cart.products.find((product) => product._id === pid);
-    if (productInCart) {
-      productInCart.quantity++;
-      await cartManager.writeAll(carts);
-      res.send("Producto agregado al carrito");
-      return;
-    } else {
-      cart.products.push({ _id: pid, quantity: 1 });
-      await cartManager.writeAll(carts);
-      res.send("Producto agregado al carrito");
-      return;
-    }
-  } catch (err) {
-    res.status(500).send(err.message);
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const cartUpdated = await cartService.addProductToCart(cid, pid);
+    res.redirect("/products");
+    /*     res.json({
+      status: "success",
+      result: cartUpdated,
+      message: "product added",
+    }); */
+  } catch (error) {
+    res.status(400).json({ status: "error", error: error.message });
   }
 };
 
@@ -108,21 +50,44 @@ export const deleteCartId = async (req, res) => {
 };
 
 export const deleteCartIdProductId = async (req, res) => {
-  const cid = req.params.cid;
-  const pid = req.params.pid;
   try {
-    const cart = await cartModel.findOne({ _id: cid });
-    const productDelete = cart.product.deleteOne({ _id: pid });
-    const result = await cartModel.updateOne({ _id: cid }, productDelete);
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const result = await cartService.deleteCartProduct(cid, pid);
     res.send({ status: "success", payload: result });
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
 
-export const putCartId = async (req, res) => {};
+export const putCartId = async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const products = req.body.products;
+    const cart = await cartService.getCartById(cartId);
+    cart.products = [...products];
+    const response = await cartService.updateCart(cartId, cart);
+    res.json({ status: "success", result: response, message: "cart updated" });
+  } catch (error) {
+    res.status(400).json({ status: "error", error: error.message });
+  }
+};
 
-export const putCartIdProductId = async (req, res) => {};
+export const putCartIdProductId = async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+    const quantity = req.body.quantity;
+    const response = await cartService.updateQuantityInCart(
+      cartId,
+      productId,
+      quantity
+    );
+    res.json({ status: "success", result: response, message: "cart updated" });
+  } catch (error) {
+    res.status(400).json({ status: "error", error: error.message });
+  }
+};
 
 export const getPurchase = async (req, res) => {
   const cid = req.params.cid;

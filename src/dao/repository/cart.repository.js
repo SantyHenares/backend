@@ -1,49 +1,31 @@
-import cartModel from "../models/cart.model.js";
-
 class CartRepository {
-  static async getCarts() {
-    try {
-      const carts = await cartModel.find();
-      return carts;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  constructor(dao) {
+    this.dao = dao;
   }
 
-  static async createCart(newCart) {
-    try {
-      const result = await cartModel.insertOne(newCart);
-      return result;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  //Abstraemos los métodos
+  async createCart() {
+    return await this.dao.addCart();
   }
 
-  static async getCartId(id) {
-    try {
-      const cart = await cartModel.find({ _id: id });
-      return cart;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  async getCartById(id) {
+    return await this.dao.getCartById(id);
   }
 
-  static async deleteCartId(id) {
-    try {
-      const result = await cartModel.deleteOne({ _id: id });
-      return result;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  async addProductToCart(cartId, productId) {
+    return await this.dao.addProductToCart(cartId, productId);
   }
 
-  static async updateCart(id, update) {
-    try {
-      const result = await cartModel.updateOne({ _id: id }, update);
-      return result;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  async updateCart(cartId, cart) {
+    return await this.dao.updateCart(cartId, cart);
+  }
+
+  async deleteCartProduct(cartId, productId) {
+    return await this.dao.deleteProduct(cartId, productId);
+  }
+
+  async updateQuantityInCart(cartId, productId, quantity) {
+    return await this.dao.updateQuantityInCart(cartId, productId, quantity);
   }
 }
 

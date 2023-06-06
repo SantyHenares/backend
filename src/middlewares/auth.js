@@ -21,15 +21,12 @@ export const checkRoles = (roles) => {
         .status(401)
         .json({ status: "error", message: "Debes estar autenticado" });
     }
-    //obtener el rol del usuario
     const userRol = req.user.rol;
     if (!roles.includes(userRol)) {
-      return res
-        .status(403)
-        .json({
-          status: "error",
-          message: "No tienes permisos para esta accion",
-        });
+      return res.status(403).json({
+        status: "error",
+        message: "No tienes permisos para esta accion",
+      });
     }
     next();
   };

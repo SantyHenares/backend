@@ -1,14 +1,11 @@
-import userModel from "../dao/models/user.model.js";
 import {
   isValidPassword,
   verifyEmailToken,
   createHash,
   generateEmailToken,
 } from "../utils.js";
-import { CustomError } from "../services/error/customError.js";
-import { generateLoginErrorInfo } from "../services/error/loginErrorMsg.js";
-import { EError } from "../enums/EError.js";
 import { sendRecoveryEmail } from "../config/messages/gmail.js";
+import { userService } from "../dao/repository/index.repository.js";
 
 export const getLogin = async (req, res) => {
   const { email, password } = req.query;
@@ -17,10 +14,7 @@ export const getLogin = async (req, res) => {
     res.render("login", {});
   } else {
     try {
-      const response = await userModel.find({
-        email: email,
-        password: password,
-      });
+      const response = await userService.getUserByEmail(email);
       req.session.user = email;
       req.session.admin = true;
     } catch (error) {
@@ -29,43 +23,10 @@ export const getLogin = async (req, res) => {
   }
 };
 
-export const postLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    if (!email || !password) {
-      // res.status(400).send({ status: "error", error: "Faltan datos" });
-      // return;
-      CustomError.createError({
-        name: "Login error",
-        cause: generateLoginErrorInfo(req.body),
-        message: "Error al loggear",
-        errorCode: EError.INVALID_TYPES,
-      });
-    }
-    const user = await userModel.findOne({ email: email });
-    if (!user) {
-      res.status(404).send({ status: "error", error: "Usuario no encontrado" });
-      return;
-    }
-
-    if (!isValidPassword(user, password)) {
-      res.status(401).send({ status: "error", error: "Contraseña incorrecta" });
-      return;
-    }
-    delete user.password;
-    req.session.user = user;
-    res.send({ status: "success", payload: user });
-    return;
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-};
-
 export const postForgotPass = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await userModel.find({ email: email });
+    const user = await userService.getUserByEmail(email);
     if (!user) {
       return res.send(
         `<p>el usuario no existe, <a href="/signup">Crea una cuenta</a></p>`
@@ -91,7 +52,7 @@ export const postResetPass = async (req, res) => {
       );
     }
     //validamos que el usuario exista en la db
-    const user = await userModel.find({ email: email });
+    const user = await userService.getUserByEmail(email);
     if (!user) {
       return res.send(
         `<p>el usuario no existe, <a href="/signup">Crea una cuenta</a></p>`
@@ -109,7 +70,7 @@ export const postResetPass = async (req, res) => {
       ...user,
       password: createHash(newPassword),
     };
-    await userModel.updateOne({ _id: id }, newUser);
+    await userService.updateUser(id, newUser);
     res.redirect("/login");
   } catch (error) {
     res.send({ status: "error", error: error.message });

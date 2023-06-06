@@ -1,49 +1,37 @@
-import productModel from "../models/product.model.js";
-
 class ProductRepository {
-  static async getAllProducts() {
-    try {
-      const products = await productModel.find();
-      return products;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  constructor(dao) {
+    this.dao = dao;
   }
 
-  static async getProductsByid(id) {
-    try {
-      const getProductsByid = await productModel.findOne({ _id: id });
-      return getProductsByid;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  //Abstraemos los métodos
+  async addProduct(product) {
+    const result = await this.dao.addProduct(product);
+    return result;
   }
 
-  static async createProduct(newProduct) {
-    try {
-      const result = await productModel.insertOne(newProduct);
-      return result;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  async getProducts() {
+    const products = await this.dao.getProducts();
+    return products;
   }
 
-  static async updateProduct(id, updateProduct) {
-    try {
-      const update = await productModel.updateOne({ _id: id }, updateProduct);
-      return update;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  async getProductById(id) {
+    const result = await this.dao.getProductById(id);
+    return result;
   }
 
-  static async deleteOneProduct(id) {
-    try {
-      const result = await productModel.deleteOne({ _id: id });
-      return result;
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
+  async getPaginateProducts(query, options) {
+    let response = await this.dao.getPaginateProducts(query, options);
+    return response;
+  }
+
+  async updateProduct(productId, product) {
+    let response = await this.dao.updateProduct(productId, product);
+    return response;
+  }
+
+  async deleteProduct(productId) {
+    let response = await this.dao.deleteProduct(productId);
+    return response;
   }
 }
 

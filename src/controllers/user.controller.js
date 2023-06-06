@@ -1,14 +1,10 @@
-// import { userService } from "../daos/repository/index.js";
-import userModel from "../dao/models/user.model.js";
+import { userService } from "../dao/repository/index.repository.js";
 
 export const modifyUser = async (req, res) => {
   try {
     const userId = req.params.uid;
-    //Verificamos si el usuario existe en la db
-    const user = await userModel.find({ _id: userId });
-    //obtenemos el actual rol del usuario
+    const user = await userService.getUserById(userId);
     const userRole = user.rol;
-    //validamos el rol actual y cambiamos el rol del usuario
     if (userRole === "usuario") {
       user.rol = PremiumRole;
     } else if (userRole === PremiumRole) {
@@ -19,7 +15,7 @@ export const modifyUser = async (req, res) => {
         message: "No es posible cambiar el rol de un administrador",
       });
     }
-    await userModel.findByIdAndUpdate(userId, user);
+    await userService.updateUser(userId, user);
     res.json({
       status: "success",
       message: `nuevo rol del usuario: ${user.rol}`,
@@ -27,4 +23,32 @@ export const modifyUser = async (req, res) => {
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
   }
+};
+
+export const getAllUsers = async (req, res) => {
+  const users = await userService.getAll();
+  res.send({ status: "success", payload: users });
+};
+
+export const getUser = async (req, res) => {
+  const userId = req.params.uid;
+  const user = await userService.getUserById(userId);
+  if (!user)
+    return res.status(404).send({ status: "error", error: "User not found" });
+  res.send({ status: "success", payload: user });
+};
+
+export const updateUser = async (req, res) => {
+  const updateBody = req.body;
+  const userId = req.params.uid;
+  const user = await userService.getUserById(userId);
+  if (!user)
+    return res.status(404).send({ status: "error", error: "User not found" });
+  const result = await userService.update(userId, updateBody);
+  res.send({ status: "success", message: "User updated" });
+};
+
+export const deleteUsers = async (req, res) => {
+  const result = await userService.deleteUsers(last_connection);
+  res.send({ status: "success", message: "Users deleted" });
 };

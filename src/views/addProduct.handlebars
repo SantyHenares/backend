@@ -1,0 +1,48 @@
+<body>
+    <div class="container bg-white">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2>Crear producto</h2>
+                        <form action="/api/products" method="POST">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input class="form-control" id="title" name="title">
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input class="form-control" id="price" name="price">
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Image URL</label>
+                                <input class="form-control" id="image" name="image">
+                            </div>
+                            <div class="form-group">
+                                <label for="genre">Genre (comedia, horror, animación, drama, romance, acción)</label>
+                                <input class="form-control" id="genre" name="genre">
+                            </div>
+                            <div class="form-group">
+                                <label for="year">Year</label>
+                                <input class="form-control" id="year" name="year">
+                            </div>
+                            <div class="form-group">
+                                <label for="rate">Rate</label>
+                                <input class="form-control" id="rate" name="rate">
+                            </div>
+                            <div class="form-group">
+                                <label for="stock">Stock</label>
+                                <input class="form-control" id="stock" name="stock">
+                            </div>                            
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description" id="description"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
