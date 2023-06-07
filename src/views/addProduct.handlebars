@@ -1,10 +1,10 @@
 <body>
-    <div class="container bg-white">
-        <div class="row">
-            <div class="col-lg-9">
+    <div class="container bg-white mt-3">
+        <div class="row bg-dark d-flex justify-content-center">
+            <div class="col-lg-6">
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h2>Crear producto</h2>
+                    <div class="col-sm-12 bg-white border border-5 border-secondary rounded">
+                        <h2 class="text-center p-2">Crear producto</h2>
                         <form action="/api/products" method="POST">
                             <div class="form-group">
                                 <label for="title">Title</label>
@@ -38,7 +38,7 @@
                                 <label for="description">Description</label>
                                 <textarea class="form-control" name="description" id="description"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
                         </form>
                         <br>
                     </div>

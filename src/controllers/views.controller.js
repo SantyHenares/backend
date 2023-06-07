@@ -1,23 +1,23 @@
 import { productService } from "../dao/repository/index.repository.js";
+import { cartService } from "../dao/repository/index.repository.js";
 
 export const getHome = (req, res) => {
   res.render("home", {});
 };
 
-export const getRealTimeProducts = (req, res) => {
-  res.render("realTimeProducts", {});
-};
-
-export const getRenderProducts = (req, res) => {
-  res.render("products", {});
+export const getRenderProducts = async (req, res) => {
+  try {
+    const products = await productService.getProducts();
+    res.render("products", { products });
+  } catch (error) {
+    res.send(`<div>Hubo un error al cargar esta vista</div>`);
+  }
 };
 
 export const getRenderCartId = (req, res) => {
+  // const cartId = req.params.cid;
+  // const cart = await cartService.getCartById(cartId);
   res.render("carts", {});
-};
-
-export const getRenderMocking = (req, res) => {
-  res.render("mockingproducts", {});
 };
 
 export const getForgotPassword = (req, res) => {
@@ -33,7 +33,10 @@ export const getProductDetail = async (req, res) => {
   try {
     const productId = req.params.pid;
     const product = await productService.getProductById(productId);
-    res.render("productDetail", product);
+    res.render("productDetail", {
+      product,
+      cartId: req?.user?.cartId || undefined,
+    });
   } catch (error) {
     res.send(`<div>Hubo un error al cargar esta vista</div>`);
   }

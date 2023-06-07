@@ -5,7 +5,6 @@ import cartRouter from "./routes/cart.js";
 import loginRouter from "./routes/login.js";
 import signupRouter from "./routes/signup.js";
 import sessionRouter from "./routes/session.js";
-import mockingRouter from "./routes/mocking.js";
 import userRouter from "./routes/users.js";
 import views from "./routes/views.js";
 import { Server } from "socket.io";
@@ -29,6 +28,7 @@ const httpServer = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 const socketServer = new Server(httpServer);
+mongoose.set("strictQuery", false);
 
 const environment = (async) => {
   try {
@@ -85,7 +85,6 @@ app.use("/", views);
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 app.use("/api/session", sessionRouter);
-app.use("/mocking", mockingRouter);
 app.get("/loggerTest", (req, res) => {
   req.logger.fatal("error fatal");
   req.logger.error("mensaje de error");

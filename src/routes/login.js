@@ -13,7 +13,7 @@ loginRouter.get("/", getLogin);
 loginRouter.post(
   "/",
   passport.authenticate("loginStrategy", {
-    failureRedirect: "/api/sessions/failure-login",
+    failureRedirect: "/login/failure-login",
   }),
   (req, res) => {
     req.session.user = req.user;

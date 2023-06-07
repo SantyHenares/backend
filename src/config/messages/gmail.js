@@ -9,16 +9,6 @@ const transporter = nodemailer.createTransport({
     user: options.gmail.adminGmail,
     pass: options.gmail.adminPass,
   },
-  // service: "mail",
-  // port: 587,
-  // auth: {
-  //   user: options.gmail.adminGmail,
-  //   pass: options.gmail.adminPass,
-  // },
-  // secure: false,
-  // tls: {
-  //   rejectUnauthorized: false,
-  // },
 });
 
 export const sendRecoveryEmail = async (email, token) => {
@@ -36,4 +26,24 @@ export const sendRecoveryEmail = async (email, token) => {
             </a>
         `,
   });
+};
+
+export const sendTicket = async (email, ticket) => {
+  try {
+    await transporter.sendMail({
+      from: "Santi Henares", // Reemplaza con tu dirección de correo
+      to: email,
+      subject: "Ticket de compra",
+      html: `
+        <h1>¡Compra realizada!</h1>
+        <div>Codigo: ${ticket.code}</div>
+        <div>Fecha: ${ticket.purchase_datetime}</div>
+        <div>Total: ${ticket.amount}</div>
+        <div>Muchas gracias y siga comprando!</div>
+      `,
+    });
+    console.log("Correo enviado correctamente");
+  } catch (error) {
+    console.error("Error al enviar el correo:", error);
+  }
 };
