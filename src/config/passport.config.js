@@ -1,6 +1,9 @@
 import passport from "passport";
 import local from "passport-local";
-import { userService } from "../dao/repository/index.repository.js";
+import {
+  userService,
+  cartService,
+} from "../dao/repository/index.repository.js";
 import { createHash, isValidPassword } from "../utils.js";
 
 const LocalStrategy = local.Strategy;
@@ -16,6 +19,7 @@ const inicializatePassport = () => {
           if (user) {
             return done(null, false);
           }
+          const cart = await cartService.createCart();
           let rol = "usuario";
           if (email.endsWith("@coder.com")) {
             rol = "admin";
@@ -25,6 +29,7 @@ const inicializatePassport = () => {
             last_name,
             email,
             password: createHash(password),
+            cart: cart._id,
             rol,
           };
           const result = await userService.addUser(newUser);

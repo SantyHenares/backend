@@ -35,7 +35,7 @@ export const getProductDetail = async (req, res) => {
     const product = await productService.getProductById(productId);
     res.render("productDetail", {
       product,
-      cartId: req?.user?.cartId || undefined,
+      cartId: req?.user?.cart || undefined,
     });
   } catch (error) {
     res.send(`<div>Hubo un error al cargar esta vista</div>`);
