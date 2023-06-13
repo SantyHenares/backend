@@ -7,7 +7,7 @@
         <div class="mt-auto text-muted">Año: {{product.year}}</div>
         <p class="card-text m-auto">{{product.description}}</p>
         <h3 class="mb-auto">${{product.price}}</h3>
-        <form action="cart/api/{{cartId}}/product/{{product._id}}" method="POST">
+        <form action="../api/carts/{{cartId}}/product/{{product._id}}" method="POST">
           <button type="submit" class="btn btn-primary">Agregar al carrito</button>
         </form>
         <a href="/products">Ir a productos</a>

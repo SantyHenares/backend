@@ -4,12 +4,9 @@
       <div class="col">
         <div class="card">
           <div class="card-body p-4">
-
             <div class="row">
-
               <div class="col-lg-12">
-                <h5 class="mb-3"><a href="../products" class="text-body"><i
-                      class="fas fa-long-arrow-alt-left me-2"></i>Continuar comprando</a></h5>
+                <h5 class="mb-3"><a href="../products" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Continuar comprando</a></h5>
                 <hr>
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -23,19 +20,17 @@
 
                 {{!-- Lista de Productos --}}
                 <div>
-                {{#each cart}}
+                {{#each cart.products}}
 
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                           <div>
-                            <img
-                              src={{products.image}}
-                              class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                            <img src={{this.id.image}} class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
                           </div>
                           <div class="ms-3">
-                            <h5>{{products.title}}</h5>
+                            <h5>{{this.id.title}}</h5>
                           </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
@@ -43,28 +38,28 @@
                             <h5 class="fw-normal mb-0">2</h5>
                           </div>
                           <div style="width: 80px;">
-                            <h5 class="mb-0">${{products.price}}</h5>
+                            <h5 class="mb-0">${{this.id.price}}</h5>
                           </div>
                           <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                         </div>
                         <div>
-                          <form action="../api/cart/{{_id}}/product/{{products._id}}" method="DELETE">
+                          <form action="../api/cart/{{../cartId}}/product/{{this.id._id}}" method="DELETE">
                               <button type="submit" class="btn btn-primary">Delete</button>
                           </form>                        
                         </div>
                       </div>
                     </div>
                   </div>
-                  {{/each}}
+                {{/each}}
                 </div>
                 {{!-- Termina lista de productos --}}
               </div>
-
             </div>
             <div class="d-flex justify-content-end m-3">
-            <button type="button" class="btn btn-info btn-lg">
+              <button type="button" class="btn btn-info btn-lg">
                 <span>Comprar</span>
-            </button></div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
