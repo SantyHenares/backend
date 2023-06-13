@@ -25,7 +25,7 @@ cartRouter.post(
 
 cartRouter.delete("/:cid", deleteCartId);
 
-cartRouter.delete("/:cid/product/:pid", deleteCartIdProductId);
+cartRouter.post("/delete/:cid/product/:pid", deleteCartIdProductId);
 
 cartRouter.put("/:cid", putCartId);
 

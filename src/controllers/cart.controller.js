@@ -28,11 +28,6 @@ export const postCartIdProductId = async (req, res) => {
     const pid = req.params.pid;
     const cartUpdated = await cartService.addProductToCart(cid, pid);
     res.redirect("/products");
-    /*     res.json({
-      status: "success",
-      result: cartUpdated,
-      message: "product added",
-    }); */
   } catch (error) {
     res.status(400).json({ status: "error", error: error.message });
   }
@@ -54,7 +49,7 @@ export const deleteCartIdProductId = async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
     const result = await cartService.deleteCartProduct(cid, pid);
-    res.send({ status: "success", payload: result });
+    res.redirect("/cart");
   } catch (error) {
     res.status(500).send(error.message);
   }

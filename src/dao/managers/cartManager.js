@@ -44,11 +44,10 @@ class CartManager {
     try {
       const cart = await this.getCartById(cartId);
       const productIndex = cart.products.findIndex(
-        (prod) => prod.id == productId
+        (prod) => prod.id._id.toString() == productId.toString()
       );
       if (productIndex >= 0) {
-        cart.products[productIndex].quantity =
-          cart.products[productIndex].quantity + 1;
+        cart.products[productIndex].quantity += 1;
       } else {
         cart.products.push({
           id: productId,
