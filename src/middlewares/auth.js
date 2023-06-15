@@ -1,8 +1,8 @@
 export const isAdminRole = (req, res, next) => {
-  if (req.user.rol === "admin") {
+  if (req.user && req.user.rol === "admin") {
     next();
   } else {
-    res.send("no tienes permisos");
+    res.status(403).json({ message: "No autorizado" });
   }
 };
 
@@ -16,12 +16,14 @@ export const isUsuarioRole = (req, res, next) => {
 
 export const checkRoles = (roles) => {
   return (req, res, next) => {
+    console.log(req.user);
     if (!req.user) {
       return res
         .status(401)
         .json({ status: "error", message: "Debes estar autenticado" });
     }
     const userRol = req.user.rol;
+    console.log(userRol);
     if (!roles.includes(userRol)) {
       return res.status(403).json({
         status: "error",

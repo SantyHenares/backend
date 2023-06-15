@@ -7,7 +7,7 @@ import {
   deleteCartIdProductId,
   putCartId,
   putCartIdProductId,
-  getPurchase,
+  postPurchase,
 } from "../controllers/cart.controller.js";
 import { checkRoles } from "../middlewares/auth.js";
 
@@ -31,6 +31,6 @@ cartRouter.put("/:cid", putCartId);
 
 cartRouter.put("/:cid/products/:pid ", putCartIdProductId);
 
-cartRouter.get("/:cid/purchase", getPurchase);
+cartRouter.post("/:cid/purchase", postPurchase);
 
 export default cartRouter;

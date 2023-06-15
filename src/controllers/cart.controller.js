@@ -1,7 +1,11 @@
 import { v4 } from "uuid";
-import { cartService } from "../dao/repository/index.repository.js";
-import productModel from "../dao/models/product.model.js";
+import {
+  cartService,
+  productService,
+} from "../dao/repository/index.repository.js";
 import ticketModel from "../dao/models/ticket.model.js";
+import { sendTicket } from "../config/messages/gmail.js";
+import moment from "moment/moment.js";
 
 export const getCart = async (req, res) => {
   try {
@@ -84,47 +88,48 @@ export const putCartIdProductId = async (req, res) => {
   }
 };
 
-export const getPurchase = async (req, res) => {
+export const postPurchase = async (req, res) => {
   const cid = req.params.cid;
 
   try {
     let amount = 0;
-    const cart = await cartModel.findOne({ _id: cid });
-    const listProduct = await productModel.find();
+    const cart = await cartService.getCartById(cid);
+    const listProduct = await productService.getProducts();
 
     // Actualizar stock y calcular el total de la compra
 
-    for (const element of cart.product) {
-      const product = listProduct.find((p) => p._id === element._id);
-      if (product.stock >= element.cantidad) {
-        await productModel.updateOne(
-          { _id: element._id },
-          { stock: product.stock - element.cantidad }
+    for (const element of cart.products) {
+      const product = listProduct.find((p) => p._id === element.id._id);
+
+      if (product.stock >= element.quantity) {
+        await productService.updateProduct(
+          { _id: element.id._id },
+          { stock: product.stock - element.quantity }
         );
-        amount += element.price * element.cantidad;
-        await cartModel.updateOne(
+        amount += element.id.price * element.quantity;
+        await cartService.updateCart(
           { _id: cart._id },
-          { $pull: { product: { _id: element._id } } }
+          { $pull: { products: { _id: element._id } } }
         );
       } else {
-        console.log(element.name + " no se agregó al proceso de compra.");
+        console.log(element.id.title + " no se agregó al proceso de compra.");
       }
     }
 
-    // Crear y guardar el ticket de compra
+    //Crear y guardar el ticket de compra
 
     const newTicket = {
       code: v4(),
       purchase_datetime: moment().format("LLL"),
       amount: amount,
-      purchase: cart.mail,
+      purchase: req.user.email,
     };
-    await ticketModel.insert(newTicket);
+    await ticketModel.create(newTicket);
 
-    res.send({
-      status: "success",
-      payload: newTicket,
-    });
+    //enviar y finalizar compra
+
+    sendTicket(req.user.email, newTicket);
+    res.redirect("/");
   } catch (error) {
     console.log(error);
     res.status(500).send(error.message);

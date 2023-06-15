@@ -31,14 +31,14 @@ export const sendRecoveryEmail = async (email, token) => {
 export const sendTicket = async (email, ticket) => {
   try {
     await transporter.sendMail({
-      from: "Santi Henares", // Reemplaza con tu dirección de correo
+      from: "Santi Henares",
       to: email,
       subject: "Ticket de compra",
       html: `
         <h1>¡Compra realizada!</h1>
         <div>Codigo: ${ticket.code}</div>
         <div>Fecha: ${ticket.purchase_datetime}</div>
-        <div>Total: ${ticket.amount}</div>
+        <div>Total: $${ticket.amount}</div>
         <div>Muchas gracias y siga comprando!</div>
       `,
     });

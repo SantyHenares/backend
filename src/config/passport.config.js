@@ -56,7 +56,7 @@ const inicializatePassport = () => {
           if (!isValidPassword(password, user.password))
             return done(null, false);
           user.last_connection = new Date();
-          // user.save();
+          user.save();
           return done(null, user);
         } catch (error) {
           return done(error);

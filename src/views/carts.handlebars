@@ -13,9 +13,6 @@
                   <div>
                     <p class="mb-1">Shopping cart</p>
                   </div>
-                  <div>
-                    <h3 class="mb-0">Total price: $300</h3>
-                  </div>
                 </div>
 
                 {{!-- Lista de Productos --}}
@@ -56,9 +53,9 @@
               </div>
             </div>
             <div class="d-flex justify-content-end m-3">
-              <button type="button" class="btn btn-info btn-lg">
-                <span>Comprar</span>
-              </button>
+              <form action="../api/carts/{{cartId}}/purchase" method="POST">
+                  <button type="submit" class="btn btn-primary">Comprar</button>
+              </form>              
             </div>
           </div>
         </div>

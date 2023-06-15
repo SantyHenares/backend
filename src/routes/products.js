@@ -6,7 +6,7 @@ import {
   putProducts,
   deleteProducts,
 } from "../controllers/products.controller.js";
-import { checkRoles } from "../middlewares/auth.js";
+import { checkRoles, isAdminRole } from "../middlewares/auth.js";
 
 const productsRouter = express.Router();
 
@@ -14,7 +14,7 @@ productsRouter.get("/", getProducts);
 
 productsRouter.get("/:pid", getProductsId);
 
-productsRouter.post("/", checkRoles(["premium", "admin"]), postProducts);
+productsRouter.post("/", postProducts);
 
 productsRouter.put("/:pid", checkRoles(["premium", "admin"]), putProducts);
 

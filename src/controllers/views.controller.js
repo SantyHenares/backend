@@ -28,26 +28,6 @@ export const getRenderCartId = async (req, res) => {
   }
 };
 
-// export const getRenderCartId = async (req, res) => {
-//   try {
-//     const cartId = req?.user?.cart;
-//     if (cartId) {
-//       const cart = await cartService.find(cartId).populate("id")
-//     .execPopulate()
-//     .then((user) => {
-//       res.render("carts", { cart: user.cart });
-//     })
-//       res.render("carts", { cart, cartId });
-//     } else {
-//       res.render("carts", {});
-//     }
-
-//   } catch (error) {
-//     res.send(`<div>Hubo un error al cargar esta vista</div>`);
-//   }
-
-// };
-
 export const getForgotPassword = (req, res) => {
   res.render("forgotPassword", {});
 };

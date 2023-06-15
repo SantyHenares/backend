@@ -43,7 +43,8 @@ export const postProducts = async (req, res) => {
   const newProduct = req.body;
   newProduct.price = Number(newProduct.price);
   newProduct.stock = Number(newProduct.stock);
-  newProduct.owner = req.user._id;
+  newProduct.owner = req.user.email;
+
   try {
     const result = await productService.addProduct(newProduct);
     res.send({ status: "success", payload: result });
