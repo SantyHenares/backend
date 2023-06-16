@@ -16,14 +16,12 @@ export const isUsuarioRole = (req, res, next) => {
 
 export const checkRoles = (roles) => {
   return (req, res, next) => {
-    console.log(req.user);
     if (!req.user) {
       return res
         .status(401)
         .json({ status: "error", message: "Debes estar autenticado" });
     }
     const userRol = req.user.rol;
-    console.log(userRol);
     if (!roles.includes(userRol)) {
       return res.status(403).json({
         status: "error",

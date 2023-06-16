@@ -1,22 +1,10 @@
 import express from "express";
-import { UserDTO } from "../dao/dto/user.dto.js";
+import { getCurrent, postLogOut } from "../controllers/session.controller.js";
 
 const sessionRouter = express.Router();
 
-sessionRouter.get("/current", (req, res) => {
-  if (req.user) {
-    const resultDto = new UserDTO(req.user);
-    res.send(resultDto);
-  } else {
-    res.send({ status: "error", error: "User no logged." });
-  }
-});
+sessionRouter.get("/current", getCurrent);
 
-sessionRouter.post("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (!error) res.send("logout ok!");
-    else res.send({ status: "Logout ERROR", body: error });
-  });
-});
+sessionRouter.post("/logout", postLogOut);
 
 export default sessionRouter;
