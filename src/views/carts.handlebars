@@ -21,7 +21,7 @@
 
                   <div class="card mb-3">
                     <div class="card-body">
-                      <div class="d-flex justify-content-between">
+                      <div class="d-flex justify-content-between justify-content-center">
                         <div class="d-flex flex-row align-items-center">
                           <div>
                             <img src={{this.id.image}} class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
@@ -38,8 +38,6 @@
                             <h5 class="mb-0">${{this.id.price}}</h5>
                           </div>
                           <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                        </div>
-                        <div>
                           <form action="../api/carts/delete/{{../cartId}}/product/{{this.id._id}}" method="POST">
                               <button type="submit" class="btn btn-primary">Delete</button>
                           </form>                        
