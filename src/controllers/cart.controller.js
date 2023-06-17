@@ -116,20 +116,26 @@ export const postPurchase = async (req, res) => {
       }
     }
 
-    //Crear y guardar el ticket de compra
+    if (amount === 0) {
+      res.send(
+        `<div>El carrito esta vacio compre un producto <a href="/products">aqui</a></div>`
+      );
+    } else {
+      //Crear y guardar el ticket de compra
 
-    const newTicket = {
-      code: v4(),
-      purchase_datetime: moment().format("LLL"),
-      amount: amount,
-      purchase: req.user.email,
-    };
-    await ticketModel.create(newTicket);
+      const newTicket = {
+        code: v4(),
+        purchase_datetime: moment().format("LLL"),
+        amount: amount,
+        purchase: req.user.email,
+      };
+      await ticketModel.create(newTicket);
 
-    //enviar y finalizar compra
+      //enviar y finalizar compra
 
-    sendTicket(req.user.email, newTicket);
-    res.redirect("/");
+      sendTicket(req.user.email, newTicket);
+      res.redirect("/");
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send(error.message);

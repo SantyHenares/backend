@@ -9,7 +9,7 @@ import {
   putCartIdProductId,
   postPurchase,
 } from "../controllers/cart.controller.js";
-import { checkRoles } from "../middlewares/auth.js";
+import { checkRoles, checkAuth } from "../middlewares/auth.js";
 
 const cartRouter = express.Router();
 

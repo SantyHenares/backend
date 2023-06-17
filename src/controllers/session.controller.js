@@ -11,7 +11,7 @@ export const getCurrent = async (req, res) => {
 
 export const postLogOut = async (req, res) => {
   req.session.destroy((error) => {
-    if (!error) res.send("logout ok!");
+    if (!error) res.redirect("/login");
     else res.send({ status: "Logout ERROR", body: error });
   });
 };

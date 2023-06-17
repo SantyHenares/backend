@@ -19,7 +19,7 @@ router.get("/products", getRenderProducts);
 
 router.get("/products/:pid", checkAuth, getProductDetail);
 
-router.get("/cart", getRenderCartId);
+router.get("/cart", checkAuth, getRenderCartId);
 
 router.get("/forgot-password", getForgotPassword);
 
