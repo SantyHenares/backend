@@ -59,8 +59,9 @@ export const getAddProduct = (req, res) => {
 
 export const getUserRender = async (req, res) => {
   try {
-    const users = await userService.getAll();
-    res.render("users", { users });
+    await userService.getAll().then((users) => {
+      res.render("users", { users: users.map((user) => user.toJSON()) });
+    });
   } catch (error) {
     res.send(`<div>Hubo un error al cargar esta vista</div>`);
   }
