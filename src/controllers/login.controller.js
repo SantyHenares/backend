@@ -46,6 +46,8 @@ export const postResetPass = async (req, res) => {
     const { email, newPassword } = req.body;
     //validar que el token sea valido.
     const validEmail = verifyEmailToken(token);
+    console.log(token);
+    console.log(validEmail);
     if (!validEmail) {
       return res.send(
         `El enlace caduco o no es valido, <a href="/forgot-password">intentar de nuevo</a>`

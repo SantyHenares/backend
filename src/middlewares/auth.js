@@ -1,32 +1,25 @@
-export const isAdminRole = (req, res, next) => {
-  if (req.user && req.user.rol === "admin") {
+export const checkAuth = (req, res, next) => {
+  if (req.user) {
     next();
   } else {
-    res.status(403).json({ message: "No autorizado" });
-  }
-};
-
-export const isUsuarioRole = (req, res, next) => {
-  if (req.user.rol === "usuario") {
-    next();
-  } else {
-    res.send("no tienes permisos");
+    res.send(
+      `<div>Debes estar autenticado <a href="/login">intente aquí.</a></div>`
+    );
   }
 };
 
 export const checkRoles = (roles) => {
   return (req, res, next) => {
     if (!req.user) {
-      return res
-        .status(401)
-        .json({ status: "error", message: "Debes estar autenticado" });
+      return res.send(
+        `<div>Debes estar autenticado <a href="/login">intente aquí.</a></div>`
+      );
     }
     const userRol = req.user.rol;
     if (!roles.includes(userRol)) {
-      return res.status(403).json({
-        status: "error",
-        message: "No tienes permisos para esta accion",
-      });
+      return res.send(
+        `<div>No tienes permisos para esta accion, <a href="/">volver al home.</a></div>`
+      );
     }
     next();
   };

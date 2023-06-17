@@ -1,0 +1,41 @@
+<div class="container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-uppercase mb-0">Manage Users</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table no-wrap user-table mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Name</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Email</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Última conexión</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Rol</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each users}}
+                        <tr>
+                        <td>
+                            <h5 class="font-medium mb-0">{{first_name}} {{last_name}}</h5>
+                        </td>
+                        <td>
+                            <span class="text-muted">{{email}}</span><br>
+                        </td>
+                        <td>
+                            <span class="text-muted">{{last_connection}}</span><br>
+                        </td>
+                        <td>
+                            <span class="text-muted">{{rol}}</span><br>
+                        </td>
+                        </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

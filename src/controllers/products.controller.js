@@ -43,7 +43,7 @@ export const postProducts = async (req, res) => {
   const newProduct = req.body;
   newProduct.price = Number(newProduct.price);
   newProduct.stock = Number(newProduct.stock);
-  newProduct.owner = req.user.email;
+  newProduct.owner = req.user._id;
 
   try {
     const result = await productService.addProduct(newProduct);

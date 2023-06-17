@@ -56,7 +56,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: options.mongoDB.url,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 15,
+      ttl: 59,
     }),
     secret: options.server.secretSession,
     resave: false,

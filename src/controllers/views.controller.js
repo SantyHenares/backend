@@ -1,5 +1,8 @@
-import { productService } from "../dao/repository/index.repository.js";
-import { cartService } from "../dao/repository/index.repository.js";
+import {
+  productService,
+  cartService,
+  userService,
+} from "../dao/repository/index.repository.js";
 
 export const getHome = (req, res) => {
   res.render("home", {});
@@ -52,4 +55,13 @@ export const getProductDetail = async (req, res) => {
 
 export const getAddProduct = (req, res) => {
   res.render("addProduct", {});
+};
+
+export const getUserRender = async (req, res) => {
+  try {
+    const users = await userService.getAll();
+    res.render("users", { users });
+  } catch (error) {
+    res.send(`<div>Hubo un error al cargar esta vista</div>`);
+  }
 };
